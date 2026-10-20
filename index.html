@@ -178,7 +178,6 @@
       </div>
       <div class="d-flex align-items-center gap-2">
         <img id="disp_doctor_photo" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%235eead4'/><text x='50' y='65' font-size='45' text-anchor='middle' fill='%23134e4a'>👨‍⚕️</text></svg>" class="doctor-avatar-img no-print" alt="Dr">
-        <span id="netBadge" class="badge bg-warning text-dark no-print" style="display:none">অফলাইন</span>
         <button class="btn btn-sm btn-light rounded-circle shadow-sm no-print" data-bs-toggle="modal" data-bs-target="#settingsModal">
           <i class="fa-solid fa-sliders text-teal"></i>
         </button>
@@ -670,51 +669,6 @@
   </div>
 
   <!-- প্রেসক্রিপশন প্রিভিউ মোডাল -->
-  <div class="modal fade" id="rxModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header border-0 pb-0">
-          <h6 class="modal-title fw-bold">প্রেসক্রিপশন প্রিভিউ</h6>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body" id="rxPrintArea">
-          <div class="border p-3 rounded bg-white" style="font-size: 13px;">
-            <div class="text-center border-bottom pb-2 mb-2">
-              <h5 class="fw-bold m-0" id="pr_clinic"></h5>
-              <div class="small fw-semibold" id="pr_doc"></div>
-              <div class="small text-muted" id="pr_contact"></div>
-            </div>
-            <div class="d-flex justify-content-between mb-1">
-              <span><strong>রোগী:</strong> <span id="pr_name"></span></span>
-              <span><strong>বয়স/লিঙ্গ:</strong> <span id="pr_age"></span></span>
-            </div>
-            <div class="d-flex justify-content-between border-bottom pb-1 mb-2">
-              <span><strong>তারিখ:</strong> <span id="pr_date"></span></span>
-              <span><strong>আইডি:</strong> <span id="pr_id"></span></span>
-            </div>
-            <div class="mb-2"><strong>রোগ নির্ণয়:</strong> <span id="pr_disease"></span></div>
-            <div class="p-2 bg-light rounded border mb-2">
-              <div class="fw-bold text-primary mb-1">Rx (ঔষধসমূহ):</div>
-              <div id="pr_meds_list"></div>
-            </div>
-            <div class="small text-muted border-top pt-1 mt-2">
-              <strong>পরামর্শ:</strong> <span id="pr_comments"></span><br><strong>পরবর্তী ভিজিট:</strong> <span id="pr_next"></span>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer border-0 pt-0">
-          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">বন্ধ</button>
-          <button type="button" class="btn btn-sm btn-success" onclick="printRxDirectly()">
-            <i class="fa-solid fa-print me-1"></i>প্রিন্ট দিন
-          </button>
-          <button type="button" class="btn btn-sm btn-outline-success" onclick="sendWhatsAppPrescription()">
-            <i class="fa-brands fa-whatsapp me-1"></i>WhatsApp
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- চেম্বার ও সেটিংস মোডাল -->
   <div class="modal fade" id="settingsModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -748,6 +702,7 @@
           </div>
           <div id="chamberConfigContainer"></div>
 
+          <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-3" onclick="openLayoutModal()"><i class="fa-solid fa-file-pen me-1"></i>প্রেসক্রিপশন হেডার ও ফুটার সেটিংস (বাংলা/English)</button>
           <div class="mb-2"><label class="badge-label"><i class="fa-solid fa-lock me-1"></i>অ্যাপ লক পিন (নতুন পিন দিলে সেভ হবে, ৪+ সংখ্যা):</label>
             <div class="input-group input-group-sm"><input type="password" inputmode="numeric" class="form-control" id="cfg_pin" placeholder="নতুন পিন"><button type="button" class="btn btn-outline-danger" onclick="clearPin()">লক বন্ধ</button></div></div>
           <button class="btn btn-success btn-sm w-100 my-3" onclick="saveDoctorProfile()">সেটিংস সেভ করুন</button>
@@ -768,6 +723,43 @@
     </div>
   </div>
 
+  <div class="modal fade" id="layoutModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header"><h6 class="modal-title fw-bold">প্রেসক্রিপশন হেডার ও ফুটার</h6><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <div class="small text-muted mb-2">প্রতিটি তথ্যের জন্য বাংলা ও English আলাদা লিখুন। "দেখাও" বন্ধ করলে প্রিন্টে আসবে না। ফাঁকা ঘর স্বয়ংক্রিয়ভাবে বাদ যায়।</div>
+          <label class="badge-label">ডিফল্ট প্রেসক্রিপশন ভাষা:</label>
+          <select id="lay_lang" class="form-select form-select-sm mb-3"><option value="bn">বাংলা</option><option value="en">English</option><option value="both">বাংলা + English (দুই পাশে)</option></select>
+          <h6 class="fw-bold text-success">হেডার</h6><div id="layHeader"></div>
+          <h6 class="fw-bold text-success mt-3">ফুটার</h6>
+          <div class="border rounded p-2 mb-2 bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-1"><span class="badge-label">প্রতিষ্ঠানের লোগো</span>
+              <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" id="lay_logo_show"><label class="form-check-label small">দেখাও</label></div></div>
+            <input type="file" id="layLogoFile" accept="image/*" class="d-none" onchange="handleFooterLogo(event)">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('layLogoFile').click()">লোগো নির্বাচন</button>
+            <img id="layLogoPrev" style="height:40px;margin-left:8px;display:none">
+          </div>
+          <div id="layFooter"></div>
+        </div>
+        <div class="modal-footer"><button type="button" class="btn btn-success btn-sm w-100" onclick="saveLayout()">সংরক্ষণ করুন</button></div>
+      </div>
+    </div>
+  </div>
+  <div id="rxEditor" style="display:none;position:fixed;inset:0;z-index:2000;background:#e5e7eb;overflow:auto">
+    <div style="position:sticky;top:0;z-index:5;background:#0f766e;padding:6px 8px;padding-top:calc(6px + env(safe-area-inset-top))">
+      <div class="d-flex flex-wrap gap-1 align-items-center">
+        <select id="rxLang" class="form-select form-select-sm" style="width:auto" onchange="rxRebuild()"><option value="bn">বাংলা</option><option value="en">English</option><option value="both">বাংলা+English</option></select>
+        <button type="button" class="btn btn-sm btn-light" onclick="rxAddMed()">+ ঔষধ</button>
+        <button type="button" class="btn btn-sm btn-light" onclick="rxAddLine('body')">+ লাইন</button>
+        <button type="button" class="btn btn-sm btn-warning" onclick="rxPrint()"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
+        <button type="button" class="btn btn-sm btn-success" onclick="rxWhatsApp()"><i class="fa-brands fa-whatsapp"></i></button>
+        <button type="button" class="btn btn-sm btn-danger ms-auto" onclick="closeRxEditor()">✕ বন্ধ</button>
+      </div>
+      <div class="small mt-1" style="color:#d1fae5">যেকোনো লেখায় ট্যাপ করে এডিট করুন · ✕ দিয়ে মুছুন · + দিয়ে যোগ করুন</div>
+    </div>
+    <div id="rxPaper" class="rx-paper" contenteditable="true"></div>
+  </div>
   <datalist id="remedyList"></datalist>
   <div id="lockScreen" style="display:none;position:fixed;inset:0;z-index:3000;background:linear-gradient(135deg,#134e4a,#0f766e);color:#fff;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center">
     <h4 class="fw-bold mb-3"><i class="fa-solid fa-lock me-2"></i>HomeoCare Pro</h4>
@@ -1093,7 +1085,7 @@
             dose: mr.querySelector('.med-dose').value
           });
         });
-        visits.push({ date: vDate, eval: vEval, notes: vNotes, meds: meds, score: vx('score'), vit: vx('vit'), next: vx('next'), fee: vx('fee'), paid: vx('paid') });
+        visits.push({ date: vDate, eval: vEval, notes: vNotes, meds: meds.filter(m => m.name.trim()), score: vx('score'), vit: vx('vit'), next: vx('next'), fee: vx('fee'), paid: vx('paid') });
       });
 
       const patientData = {
@@ -1207,39 +1199,39 @@
         const p = e.target.result;
         if (!p) return;
 
-        document.getElementById('patientId').value = p.id;
-        document.getElementById('f_case_no').value = p.case_no;
-        document.getElementById('f_date').value = p.entry_date;
-        document.getElementById('f_name').value = p.patient_name;
+        document.getElementById('patientId').value = p.id ?? '';
+        document.getElementById('f_case_no').value = p.case_no ?? '';
+        document.getElementById('f_date').value = p.entry_date ?? '';
+        document.getElementById('f_name').value = p.patient_name ?? '';
         document.getElementById('f_disease').value = p.disease_tag || '';
-        document.getElementById('f_age').value = p.age;
-        document.getElementById('f_gender').value = p.gender;
-        document.getElementById('f_marital').value = p.marital_status;
-        document.getElementById('f_phone').value = p.phone;
-        document.getElementById('f_profession').value = p.profession;
-        document.getElementById('f_address').value = p.address;
-        document.getElementById('f_causation').value = p.causation;
+        document.getElementById('f_age').value = p.age ?? '';
+        document.getElementById('f_gender').value = p.gender ?? '';
+        document.getElementById('f_marital').value = p.marital_status ?? '';
+        document.getElementById('f_phone').value = p.phone ?? '';
+        document.getElementById('f_profession').value = p.profession ?? '';
+        document.getElementById('f_address').value = p.address ?? '';
+        document.getElementById('f_causation').value = p.causation ?? '';
         document.getElementById('f_pqrs').value = p.pqrs_symptoms || '';
         document.getElementById('f_obstacles').value = p.obstacles_to_cure || '';
         document.getElementById('f_diathesis').value = p.diathesis || '';
-        document.getElementById('f_past_history').value = p.past_history;
-        document.getElementById('f_family_history').value = p.family_history;
-        document.getElementById('f_thermal').value = p.thermal;
-        document.getElementById('f_appetite').value = p.appetite;
-        document.getElementById('f_thirst').value = p.thirst;
-        document.getElementById('f_tongue').value = p.tongue;
-        document.getElementById('f_desires').value = p.desires;
-        document.getElementById('f_aversions').value = p.aversions;
-        document.getElementById('f_sweat').value = p.sweat;
-        document.getElementById('f_evacuation').value = p.evacuation;
-        document.getElementById('f_sleep').value = p.sleep;
-        document.getElementById('f_dreams').value = p.dreams;
-        document.getElementById('f_female').value = p.female_history;
-        document.getElementById('f_mind').value = p.mind_temperament;
-        document.getElementById('f_fears').value = p.fears;
-        document.getElementById('f_consolation').value = p.consolation;
-        document.getElementById('f_company').value = p.company;
-        document.getElementById('f_miasm').value = p.miasm;
+        document.getElementById('f_past_history').value = p.past_history ?? '';
+        document.getElementById('f_family_history').value = p.family_history ?? '';
+        document.getElementById('f_thermal').value = p.thermal ?? '';
+        document.getElementById('f_appetite').value = p.appetite ?? '';
+        document.getElementById('f_thirst').value = p.thirst ?? '';
+        document.getElementById('f_tongue').value = p.tongue ?? '';
+        document.getElementById('f_desires').value = p.desires ?? '';
+        document.getElementById('f_aversions').value = p.aversions ?? '';
+        document.getElementById('f_sweat').value = p.sweat ?? '';
+        document.getElementById('f_evacuation').value = p.evacuation ?? '';
+        document.getElementById('f_sleep').value = p.sleep ?? '';
+        document.getElementById('f_dreams').value = p.dreams ?? '';
+        document.getElementById('f_female').value = p.female_history ?? '';
+        document.getElementById('f_mind').value = p.mind_temperament ?? '';
+        document.getElementById('f_fears').value = p.fears ?? '';
+        document.getElementById('f_consolation').value = p.consolation ?? '';
+        document.getElementById('f_company').value = p.company ?? '';
+        document.getElementById('f_miasm').value = p.miasm ?? '';
         document.getElementById('f_comments').value = p.doctor_comments || '';
 
         currentAttachedImages = p.images || [];
@@ -1272,6 +1264,7 @@
       setView('emergency');
       const d = document.getElementById('em_date'); if (!d.value) d.value = todayStr();
       if (!document.getElementById('emMedsContainer').children.length) addEmergencyMedRow();
+      emFillList();
     }
     function showReportView() { setView('report'); renderReport(); }
 
@@ -1294,31 +1287,10 @@
     }
 
     function printEmergencyRx() {
-      const name = document.getElementById('em_name').value || 'নাম প্রকাশে অনিচ্ছুক';
-      const age = document.getElementById('em_age').value || 'N/A';
-      const complaint = document.getElementById('em_complaint').value || 'জরুরি কেস';
-      const date = document.getElementById('em_date').value;
-      const advice = document.getElementById('em_advice').value || 'নিয়ম মেনে চলুন।';
-
-      let medsHtml = '';
-      document.querySelectorAll('#emMedsContainer > div').forEach((row, i) => {
-        const m = row.querySelector('.em-name').value;
-        const d = row.querySelector('.em-dose').value;
-        if (m) medsHtml += `<div><strong>${i+1}. ${esc(m)}</strong> — <em>${esc(d)}</em></div>`;
-      });
-
-      triggerDirectPrint({
-        clinic: document.getElementById('disp_clinic_name').innerText,
-        doc: localStorage.getItem('doctor_name') || '',
-        contact: document.getElementById('active_chamber_address').innerText,
-        name: name,
-        age: age,
-        id: 'EM-' + Math.floor(100 + Math.random() * 900),
-        date: date,
-        disease: complaint,
-        meds: medsHtml || 'কোনো ঔষধ লেখা হয়নি',
-        comments: advice
-      });
+      const g = id => document.getElementById(id).value.trim();
+      const meds = [...document.querySelectorAll('#emMedsContainer > div')].map(r => ({ name: r.querySelector('.em-name').value.trim(), dose: r.querySelector('.em-dose').value.trim() })).filter(m => m.name);
+      openRxEditor('pad', { name: g('em_name'), age: [g('em_age'), g('em_gender')].filter(Boolean).join(' / '), id: emPatient ? emPatient.case_no : '', date: g('em_date'),
+        disease: g('em_complaint'), meds, advice: g('em_advice'), phone: emPatient ? emPatient.phone : '' });
     }
 
     function sendEmergencyWhatsApp() {
@@ -1341,153 +1313,6 @@
       }
       msg += `------------------------------------\n_আরোগ্য কামনা করছি।_`;
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    function openRxModal() {
-      const name = document.getElementById('f_name').value;
-      if (!name) { alert("আগে রোগীর নাম লিখুন!"); return; }
-
-      const visitBoxes = document.querySelectorAll('#rxVisitContainer > .rx-visit-box');
-      const lastVisit = visitBoxes.length > 0 ? visitBoxes[visitBoxes.length - 1] : null;
-
-      document.getElementById('pr_clinic').innerText = document.getElementById('disp_clinic_name').innerText;
-      document.getElementById('pr_doc').innerText = localStorage.getItem('doctor_name') || '';
-      document.getElementById('pr_contact').innerText = document.getElementById('active_chamber_address').innerText;
-      document.getElementById('pr_name').innerText = name;
-      document.getElementById('pr_age').innerText = `${document.getElementById('f_age').value || 'N/A'} / ${document.getElementById('f_gender').value || ''}`;
-      document.getElementById('pr_id').innerText = document.getElementById('f_case_no').value;
-      document.getElementById('pr_date').innerText = lastVisit ? lastVisit.querySelector('.visit-date').value : document.getElementById('f_date').value;
-      document.getElementById('pr_disease').innerText = document.getElementById('f_disease').value || 'জেনারেল কেস';
-
-      let medsHtml = '';
-      if (lastVisit) {
-        lastVisit.querySelectorAll('.med-row').forEach((mr, i) => {
-          const m = mr.querySelector('.med-name').value;
-          const s = mr.querySelector('.med-scale').value;
-          const d = mr.querySelector('.med-dose').value;
-          if (m) medsHtml += `<div class="mb-1"><strong>${i+1}. ${esc(m)} [${esc(s)}]</strong> — <span>${esc(d)}</span></div>`;
-        });
-      }
-      document.getElementById('pr_meds_list').innerHTML = medsHtml || 'কোনো ঔষধ দেওয়া হয়নি';
-      document.getElementById('pr_comments').innerText = document.getElementById('f_comments').value || 'নিয়ম মেনে ঔষধ সেবন করুন।';
-      document.getElementById('pr_next').innerText = (lastVisit && lastVisit.querySelector('.visit-next').value) || '';
-
-      new bootstrap.Modal(document.getElementById('rxModal')).show();
-    }
-
-    function printRxDirectly() {
-      triggerDirectPrint({
-        clinic: document.getElementById('pr_clinic').innerText,
-        doc: document.getElementById('pr_doc').innerText,
-        contact: document.getElementById('pr_contact').innerText,
-        name: document.getElementById('pr_name').innerText,
-        age: document.getElementById('pr_age').innerText,
-        id: document.getElementById('pr_id').innerText,
-        date: document.getElementById('pr_date').innerText,
-        disease: document.getElementById('pr_disease').innerText,
-        meds: document.getElementById('pr_meds_list').innerHTML,
-        comments: document.getElementById('pr_comments').innerText,
-        next: document.getElementById('pr_next').innerText
-      });
-    }
-
-    function triggerDirectPrint(data) {
-      data = Object.fromEntries(Object.entries(data).map(([k, v]) => [k, k === 'meds' ? v : esc(v)]));
-      const iframe = document.createElement('iframe');
-      iframe.style.position = 'absolute';
-      iframe.style.width = '0px';
-      iframe.style.height = '0px';
-      iframe.style.border = 'none';
-      document.body.appendChild(iframe);
-
-      const doc = iframe.contentWindow.document;
-      doc.open();
-      doc.write(`
-        <html>
-          <head>
-            <title>Prescription Pad</title>
-            <style>
-              body { font-family: system-ui, sans-serif; padding: 20px; color: #111; font-size: 13.5px; }
-              .header { text-align: center; border-bottom: 2px solid #0f766e; padding-bottom: 8px; margin-bottom: 12px; }
-              .clinic { font-size: 18px; font-weight: bold; color: #0f766e; margin: 0; }
-              .doc { font-weight: 600; font-size: 13px; margin: 2px 0; }
-              .contact { font-size: 11px; color: #555; }
-              .row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-              .rx-box { border: 1px solid #999; border-radius: 6px; padding: 12px; background: #fafafa; margin: 15px 0; }
-              .footer { text-align: center; font-size: 10px; color: #777; border-top: 1px solid #ccc; padding-top: 8px; margin-top: 25px; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <div class="clinic">${data.clinic}</div>
-              <div class="doc">${data.doc}</div>
-              <div class="contact">${data.contact}</div>
-            </div>
-            <div class="row">
-              <span><strong>রোগী:</strong> ${data.name}</span>
-              <span><strong>বয়স/লিঙ্গ:</strong> ${data.age}</span>
-            </div>
-            <div class="row" style="border-bottom: 1px solid #ddd; padding-bottom: 4px;">
-              <span><strong>তারিখ:</strong> ${data.date}</span>
-              <span><strong>আইডি:</strong> ${data.id}</span>
-            </div>
-            <div style="margin: 8px 0;"><strong>সমস্যা/রোগ:</strong> ${data.disease}</div>
-            <div class="rx-box">
-              <strong style="color: #0f766e; font-size: 15px;">Rx (ঔষধ ও মাত্রা):</strong>
-              <div style="margin-top: 8px;">${data.meds}</div>
-            </div>
-            <div><strong>পরামর্শ:</strong> ${data.comments}</div>${data.next ? `<div style="margin-top:6px"><strong>পরবর্তী ভিজিট:</strong> ${data.next}</div>` : ''}
-            <div style="margin-top:40px;text-align:right;font-size:12px">স্বাক্ষর: ____________</div>
-            <div class="footer">আরোগ্য আপনার চিরসঙ্গী হোক। চিকিৎসকের পরামর্শ অনুযায়ী সেব্য।</div>
-          </body>
-        </html>
-      `);
-      doc.close();
-
-      setTimeout(() => {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-        setTimeout(() => document.body.removeChild(iframe), 1000);
-      }, 300);
-    }
-
-    function sendWhatsAppPrescription() {
-      const name = document.getElementById('f_name').value;
-      const phone = document.getElementById('f_phone').value;
-      if (!name) { alert("রোগীর নাম লিখুন!"); return; }
-
-      let msg = `*${document.getElementById('disp_clinic_name').innerText}*\n`;
-      msg += `${localStorage.getItem('doctor_name') || ''}\n\n`;
-      msg += `*রোগী:* ${name} (আইডি: ${document.getElementById('f_case_no').value})\n`;
-      msg += `*রোগ নির্ণয়:* ${document.getElementById('f_disease').value || 'হোমিওপ্যাথিক কেস'}\n`;
-      msg += `------------------------------------\n*Rx (ঔষধসমূহ):*\n`;
-
-      const visitBoxes = document.querySelectorAll('#rxVisitContainer > .rx-visit-box');
-      if (visitBoxes.length > 0) {
-        const lastV = visitBoxes[visitBoxes.length - 1];
-        lastV.querySelectorAll('.med-row').forEach((mr, i) => {
-          const m = mr.querySelector('.med-name').value;
-          const s = mr.querySelector('.med-scale').value;
-          const d = mr.querySelector('.med-dose').value;
-          if (m) msg += `${i+1}. *${m} [${s}]* — ${d}\n`;
-        });
-      }
-
-      if (document.getElementById('f_comments').value) {
-        msg += `\n*পরামর্শ:* ${document.getElementById('f_comments').value}\n`;
-      }
-      const lv0 = [...document.querySelectorAll('#rxVisitContainer > .rx-visit-box')].pop();
-      const nx = lv0 && lv0.querySelector('.visit-next').value;
-      if (nx) msg += `\n*পরবর্তী ভিজিট:* ${nx}\n`;
-      msg += `------------------------------------\n_দ্রুত আরোগ্য কামনায়।_`;
-
-      let cleanPhone = waNum(phone);
-      if (cleanPhone.startsWith('01')) cleanPhone = '88' + cleanPhone;
-
-      const waUrl = cleanPhone 
-        ? `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`
-        : `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
-      window.open(waUrl, '_blank');
     }
 
     function searchAI(platform) {
@@ -1539,7 +1364,7 @@
     function exportDataBackup() {
       db.transaction(["patients"], "readonly").objectStore("patients").getAll().onsuccess = e => {
         const st = {};
-        ['doctor_name', 'clinic_chambers', 'custom_clinic_logo', 'custom_doc_photo'].forEach(k => { const v = localStorage.getItem(k); if (v != null) st[k] = v; });
+        ['doctor_name', 'clinic_chambers', 'custom_clinic_logo', 'custom_doc_photo', 'rx_layout', 'rx_footer_logo'].forEach(k => { const v = localStorage.getItem(k); if (v != null) st[k] = v; });
         dl(new Blob([JSON.stringify({ app: 'HomeoCarePro', v: 2, patients: e.target.result, settings: st })], { type: 'application/json' }), `HomeoCare_Backup_${todayStr()}.json`);
         localStorage.setItem('last_backup', Date.now());
         renderBackupBanner();
@@ -1658,10 +1483,223 @@
       if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
       else alert('ব্রাউজার মেনু (⋮) থেকে "Install app / Add to Home screen" চাপুন। (HTTPS হোস্টিং প্রয়োজন)');
     }
-    const netUI = () => document.getElementById('netBadge').style.display = navigator.onLine ? 'none' : '';
-    addEventListener('online', netUI); addEventListener('offline', netUI); netUI();
     if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
+
+    // ===== প্রেসক্রিপশন হেডার/ফুটার ও এডিটর =====
+    const HF = {
+      header: [['h_special', 'যে বিষয়ে বিশেষজ্ঞ', 'Specialist in'], ['h_name', 'ডাঃ নাম', 'Doctor Name'], ['h_degree', 'ডিগ্রী', 'Degree'], ['h_title', 'পদবী', 'Designation'],
+        ['h_dept', 'বিভাগ', 'Department'], ['h_org', 'কর্মরত প্রতিষ্ঠানের নাম', 'Working Institute'], ['h_train', 'বিশেষ প্রশিক্ষণ', 'Special Training'],
+        ['h_reg', 'রেজিস্ট্রেশন নম্বর (শুধু নম্বর লিখুন)', 'Registration No.'], ['h_extra', 'অতিরিক্ত (এক্সট্রা)', 'Extra']],
+      footer: [['f_org', 'প্রতিষ্ঠানের নাম', 'Organization'], ['f_addr', 'প্রতিষ্ঠানের ঠিকানা', 'Address'], ['f_mobile', 'প্রতিষ্ঠানের মোবাইল নং (শুধু নম্বর)', 'Mobile'],
+        ['f_web', 'ওয়েবসাইট ও ইমেইল', 'Website & Email'], ['f_hot', 'হটলাইন নম্বর (শুধু নম্বর)', 'Hotline'], ['f_serial', 'অগ্রিম সিরিয়াল ও যোগাযোগ নম্বর (মাঝখানে)', 'Appointment & Contact (center)'],
+        ['f_time', 'রোগী দেখার দিন ও সময়', 'Visiting Days & Time'], ['f_credit', 'ডিজাইনার ক্রেডিট', 'Designer Credit'], ['f_extra', 'অতিরিক্ত (এক্সট্রা)', 'Extra']]
+    };
+    const PFX = { h_reg: ['রেজি. নং: ', 'Reg. No: '], f_mobile: ['মোবাইল: ', 'Mobile: '], f_hot: ['হটলাইন: ', 'Hotline: '], f_serial: ['অগ্রিম সিরিয়াল ও যোগাযোগ: ', 'Appointment & Contact: '], f_time: ['রোগী দেখার সময়: ', 'Visiting Hours: '] };
+    const DEL = '<span class="rx-del no-print" contenteditable="false">&times;</span>';
+    const RXCSS = `.rx-paper{background:#fff;color:#111;max-width:794px;margin:10px auto;padding:16px 18px;display:flex;flex-direction:column;min-height:1000px;font-size:14px;line-height:1.5;font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .rx-paper:focus{outline:none}.rx-sec{position:relative}.rx-head{border-bottom:2px solid #0f766e;padding-bottom:6px;margin-bottom:8px}.rx-body{flex:1}
+    .rx-foot{border-top:2px solid #0f766e;padding-top:6px;margin-top:10px;text-align:center}.rx-cols{display:flex;gap:10px}.rx-col{flex:1}.rx-right{text-align:right}.rx-center{text-align:center}
+    .rx-big{font-size:20px;color:#0f766e;font-weight:700}.rx-line,.rx-blk{min-height:1.4em}.rx-blk{margin:4px 0}.rx-meds{counter-reset:m;margin:6px 0 6px 6px}.rx-med{margin:5px 0}
+    .rx-med::before{counter-increment:m;content:counter(m) ". ";font-weight:700}.rx-rx{font-size:24px;font-weight:700;color:#0f766e}.fw-bold{font-weight:700}
+    .rx-serial{font-weight:700;font-size:15px;background:#ecfdf5;border-radius:6px;padding:2px 6px;margin:2px 0}.rx-time{font-size:12px}
+    .rx-footinfo{display:flex;align-items:center;gap:10px;text-align:left;margin-top:4px}.rx-logo{height:56px;width:auto;object-fit:contain}.rx-logowrap{display:inline-block}
+    .rx-credit{font-size:10px;color:#6b7280;margin-top:4px}.rx-del{color:#dc2626;cursor:pointer;margin-left:6px;font-weight:700;user-select:none;-webkit-user-select:none}
+    .rx-add{text-align:center;margin-top:4px}.rx-add button{font-size:11px;border:1px dashed #0f766e;background:#fff;color:#0f766e;border-radius:6px;padding:0 8px}`;
+    document.head.insertAdjacentHTML('beforeend', '<style>' + RXCSS + '</style>');
+    const fd = x => /^\d{4}-\d\d-\d\d$/.test(x || '') ? x.split('-').reverse().join('/') : (x || '');
+
+    function getLayout() {
+      let L = null; try { L = JSON.parse(localStorage.getItem('rx_layout') || 'null'); } catch {}
+      if (!L) {
+        const ch = JSON.parse(localStorage.getItem('clinic_chambers') || '[]')[0] || {};
+        L = { lang: 'bn', logo: { show: true }, f: {
+          h_name: { show: true, bn: localStorage.getItem('doctor_name') || '', en: '' },
+          f_org: { show: true, bn: ch.name || '', en: '' }, f_addr: { show: true, bn: ch.address || '', en: '' } } };
+      }
+      L.f = L.f || {}; L.logo = L.logo || { show: true };
+      HF.header.concat(HF.footer).forEach(([id]) => { L.f[id] = L.f[id] || { show: true, bn: '', en: '' }; });
+      return L;
+    }
+    function buildLayoutForm() {
+      const L = getLayout();
+      document.getElementById('lay_lang').value = L.lang || 'bn';
+      document.getElementById('lay_logo_show').checked = L.logo.show !== false;
+      const lg = localStorage.getItem('rx_footer_logo') || localStorage.getItem('custom_clinic_logo');
+      const pv = document.getElementById('layLogoPrev'); pv.style.display = lg ? '' : 'none'; if (lg) pv.src = lg;
+      const row = ([id, bn, en]) => { const f = L.f[id]; return `<div class="border rounded p-2 mb-2 bg-light lay-row" data-id="${id}">
+        <div class="d-flex justify-content-between align-items-center mb-1"><span class="badge-label">${bn}</span>
+        <div class="form-check form-switch m-0"><input class="form-check-input lay-show" type="checkbox" ${f.show !== false ? 'checked' : ''}><label class="form-check-label small">দেখাও</label></div></div>
+        <div class="row g-1"><div class="col-12 col-md-6"><input class="form-control form-control-sm lay-bn" placeholder="বাংলা" value="${esc(f.bn)}"></div>
+        <div class="col-12 col-md-6"><input class="form-control form-control-sm lay-en" placeholder="English (${en})" value="${esc(f.en)}"></div></div></div>`; };
+      document.getElementById('layHeader').innerHTML = HF.header.map(row).join('');
+      document.getElementById('layFooter').innerHTML = HF.footer.map(row).join('');
+    }
+    function openLayoutModal() {
+      const el = document.getElementById('settingsModal'), sm = bootstrap.Modal.getInstance(el);
+      const go = () => { buildLayoutForm(); bootstrap.Modal.getOrCreateInstance(document.getElementById('layoutModal')).show(); };
+      if (sm && el.classList.contains('show')) { el.addEventListener('hidden.bs.modal', go, { once: true }); sm.hide(); } else go();
+    }
+    function handleFooterLogo(e) {
+      const f = e.target.files[0]; if (!f) return;
+      compressImg(f, 300, .85).then(d => { try { localStorage.setItem('rx_footer_logo', d); const pv = document.getElementById('layLogoPrev'); pv.src = d; pv.style.display = ''; } catch { alert('ছবি সংরক্ষণ করা যায়নি।'); } });
+      e.target.value = '';
+    }
+    function saveLayout() {
+      const L = { lang: document.getElementById('lay_lang').value, logo: { show: document.getElementById('lay_logo_show').checked }, f: {} };
+      document.querySelectorAll('.lay-row').forEach(r => { L.f[r.dataset.id] = { show: r.querySelector('.lay-show').checked, bn: r.querySelector('.lay-bn').value.trim(), en: r.querySelector('.lay-en').value.trim() }; });
+      localStorage.setItem('rx_layout', JSON.stringify(L));
+      bootstrap.Modal.getInstance(document.getElementById('layoutModal')).hide();
+      alert('হেডার ও ফুটার সংরক্ষিত হয়েছে!');
+    }
+
+    const fieldText = (id, L, g) => { const f = L.f[id]; if (!f || f.show === false) return ''; const t = (f[g] || '').trim(); if (!t) return ''; const p = PFX[id]; return (p ? p[g === 'bn' ? 0 : 1] : '') + t; };
+    const rxLine = (cls, t) => `<div class="rx-line ${cls || ''}">${esc(t)}${DEL}</div>`;
+    function buildHeader(L, lang) {
+      const col = g => HF.header.map(([id]) => { const t = fieldText(id, L, g); return t ? rxLine(id === 'h_name' ? 'rx-big' : '', t) : ''; }).join('');
+      return lang === 'both' ? `<div class="rx-cols"><div class="rx-col">${col('bn')}</div><div class="rx-col rx-right">${col('en')}</div></div>` : `<div class="rx-center">${col(lang)}</div>`;
+    }
+    function buildFooter(L, lang) {
+      const gs = lang === 'both' ? ['bn', 'en'] : [lang];
+      const tx = id => gs.map(g => fieldText(id, L, g)).filter(Boolean);
+      const ln = (arr, cls) => arr.map(t => rxLine(cls, t)).join('');
+      const logo = L.logo.show !== false ? (localStorage.getItem('rx_footer_logo') || localStorage.getItem('custom_clinic_logo') || '') : '';
+      let h = ln(tx('f_serial'), 'rx-serial') + ln(tx('f_time'), 'rx-time');
+      const info = ln(tx('f_org'), 'fw-bold') + ['f_addr', 'f_mobile', 'f_web', 'f_hot', 'f_extra'].map(id => ln(tx(id))).join('');
+      if (logo || info) h += `<div class="rx-footinfo">${logo ? `<span class="rx-logowrap"><img class="rx-logo" src="${esc(logo)}">${DEL}</span>` : ''}<div class="rx-footlines">${info}</div></div>`;
+      return h + ln(tx('f_credit'), 'rx-credit');
+    }
+    function buildBody(d, lang) {
+      const T = (bn, en) => lang === 'bn' ? bn : lang === 'en' ? en : bn + ' / ' + en;
+      const B = h => `<div class="rx-blk">${h}${DEL}</div>`;
+      const row = (a, v) => v ? `<b>${a}:</b> ${esc(v)}` : '';
+      let h = '';
+      const l1 = [row(T('রোগী', 'Patient'), d.name), row(T('বয়স/লিঙ্গ', 'Age/Sex'), d.age)].filter(Boolean).join(' &nbsp; ');
+      const l2 = [row(T('তারিখ', 'Date'), fd(d.date)), row(T('আইডি', 'ID'), d.id)].filter(Boolean).join(' &nbsp; ');
+      if (l1) h += B(l1); if (l2) h += B(l2);
+      if (d.blank) return h + B('এখানে লিখুন…');
+      if (d.disease) h += B(row(T('রোগ নির্ণয়', 'Diagnosis'), d.disease));
+      const vt = [d.vit, d.score ? T('কষ্টের স্কোর', 'Symptom score') + ': ' + d.score + '/10' : ''].filter(Boolean).join(' | ');
+      if (vt) h += B(row(T('ভাইটাল', 'Vitals'), vt));
+      h += `<div class="rx-blk rx-rx">Rx${DEL}</div><div class="rx-meds">` + (d.meds || []).map(m => `<div class="rx-med"><b>${esc(m.name)}${m.scale ? ' [' + esc(m.scale) + ']' : ''}</b>${m.dose ? ' — ' + esc(m.dose) : ''}${DEL}</div>`).join('') + '</div>';
+      if (d.advice) h += B(row(T('পরামর্শ', 'Advice'), d.advice));
+      if (d.next) h += B(row(T('পরবর্তী ভিজিট', 'Next Visit'), fd(d.next)));
+      return h;
+    }
+
+    let rxCtx = null, rxDirty = false, rxPrev = 'bn';
+    function openRxEditor(mode, data) {
+      rxCtx = { mode, data };
+      const sel = document.getElementById('rxLang'); sel.value = getLayout().lang || 'bn'; rxPrev = sel.value; rxDirty = false;
+      rxRebuild();
+      const ed = document.getElementById('rxEditor'); ed.style.display = 'block'; ed.scrollTop = 0; document.body.style.overflow = 'hidden';
+    }
+    function rxRebuild() {
+      const sel = document.getElementById('rxLang'), lang = sel.value;
+      if (rxDirty && lang !== rxPrev && !confirm('ভাষা বদলালে আপনার এডিট মুছে যাবে। চালিয়ে যাবেন?')) { sel.value = rxPrev; return; }
+      rxPrev = lang; const L = getLayout();
+      const add = (sec) => `<div class="rx-add no-print" contenteditable="false"><button type="button" data-sec="${sec}">+ লাইন যোগ</button></div>`;
+      document.getElementById('rxPaper').innerHTML = `<div class="rx-sec rx-head">${buildHeader(L, lang)}${add('head')}</div><div class="rx-sec rx-body">${buildBody(rxCtx.data, lang)}${add('body')}</div><div class="rx-sec rx-foot">${buildFooter(L, lang)}${add('foot')}</div>`;
+      rxDirty = false;
+    }
+    function closeRxEditor() {
+      if (rxDirty && !confirm('এডিট করা প্রেসক্রিপশন বন্ধ করলে পরিবর্তন মুছে যাবে। বন্ধ করবেন?')) return;
+      document.getElementById('rxEditor').style.display = 'none'; document.body.style.overflow = '';
+    }
+    function rxSelect(node) {
+      document.getElementById('rxPaper').focus();
+      const r = document.createRange(); r.selectNodeContents(node); const g = getSelection(); g.removeAllRanges(); g.addRange(r);
+    }
+    function rxAddLine(sec) {
+      const c = document.querySelector('#rxPaper .rx-' + sec); if (!c) return;
+      const el = document.createElement('div'); el.className = sec === 'body' ? 'rx-blk' : 'rx-line';
+      el.innerHTML = '<span>নতুন লাইন লিখুন</span>' + DEL;
+      c.querySelector('.rx-add').before(el); rxSelect(el.firstChild); rxDirty = true;
+    }
+    function rxAddMed() {
+      let m = document.querySelector('#rxPaper .rx-meds');
+      if (!m) { rxAddLine('body'); return; }
+      const el = document.createElement('div'); el.className = 'rx-med';
+      el.innerHTML = '<b>ঔষধ ও শক্তি</b> — সেবনবিধি' + DEL;
+      m.appendChild(el); rxSelect(el.firstChild); rxDirty = true;
+    }
+    document.getElementById('rxPaper').addEventListener('click', e => {
+      const d = e.target.closest('.rx-del'); if (d) { d.parentElement.remove(); rxDirty = true; return; }
+      const a = e.target.closest('.rx-add button'); if (a) rxAddLine(a.dataset.sec);
+    });
+    document.getElementById('rxPaper').addEventListener('input', () => { rxDirty = true; });
+
+    function printHtml(html) {
+      const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+      document.body.appendChild(f);
+      const d = f.contentWindow.document; d.open();
+      d.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><style>${RXCSS}@page{size:A4;margin:10mm}body{margin:0}.rx-paper{margin:0;max-width:none;min-height:273mm;padding:0}</style></head><body>${html}</body></html>`);
+      d.close();
+      setTimeout(() => { f.contentWindow.focus(); f.contentWindow.print(); setTimeout(() => f.remove(), 2000); }, 600);
+    }
+    function rxPrint() {
+      const c = document.getElementById('rxPaper').cloneNode(true);
+      c.querySelectorAll('.no-print').forEach(x => x.remove());
+      c.removeAttribute('contenteditable'); c.querySelectorAll('[contenteditable]').forEach(x => x.removeAttribute('contenteditable'));
+      printHtml(c.outerHTML);
+    }
+    function rxWhatsApp() {
+      const t = el => { const c = el.cloneNode(true); c.querySelectorAll('.no-print').forEach(x => x.remove()); return c.textContent.trim(); };
+      const P = document.getElementById('rxPaper'); let n = 0;
+      let msg = [...P.querySelectorAll('.rx-head .rx-line')].slice(0, 3).map(t).filter(Boolean).map(x => '*' + x + '*').join('\n') + '\n------------------------------------\n';
+      P.querySelectorAll('.rx-body .rx-blk, .rx-body .rx-med').forEach(el => { msg += (el.classList.contains('rx-med') ? (++n) + '. ' : '') + t(el) + '\n'; });
+      const sr = [...P.querySelectorAll('.rx-foot .rx-serial')].map(t).join('\n');
+      msg += '------------------------------------\n' + (sr ? sr + '\n' : '') + '_আরোগ্য কামনায়।_';
+      const ph = rxCtx && rxCtx.data.phone ? waNum(rxCtx.data.phone) : '';
+      window.open(`https://api.whatsapp.com/send?${ph ? 'phone=' + ph + '&' : ''}text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function openRxModal() {
+      const g = id => document.getElementById(id).value;
+      if (!g('f_name')) { alert("আগে রোগীর নাম লিখুন!"); return; }
+      const vb = [...document.querySelectorAll('#rxVisitContainer > .rx-visit-box')], lv = vb[vb.length - 1];
+      const q = c => lv ? lv.querySelector(c).value : '';
+      const meds = lv ? [...lv.querySelectorAll('.med-row')].map(r => ({ name: r.querySelector('.med-name').value.trim(), scale: r.querySelector('.med-scale').value, dose: r.querySelector('.med-dose').value.trim() })).filter(m => m.name) : [];
+      openRxEditor('patient', { name: g('f_name'), age: `${g('f_age') || 'N/A'} / ${g('f_gender') || ''}`, id: g('f_case_no'), date: lv ? q('.visit-date') : g('f_date'),
+        disease: g('f_disease') || 'জেনারেল কেস', vit: q('.visit-vit'), score: q('.visit-score'), next: q('.visit-next'), advice: g('f_comments') || 'নিয়ম মেনে ঔষধ সেবন করুন।', meds, phone: g('f_phone') });
+    }
+
+    // ===== জরুরি প্যাড =====
+    let emPatient = null;
+    document.getElementById('em_date').closest('.row').insertAdjacentHTML('beforebegin', `
+      <div class="border rounded p-2 mb-2 bg-light">
+        <label class="badge-label"><i class="fa-solid fa-database me-1"></i>সংরক্ষিত রোগী থেকে তথ্য লোড:</label>
+        <div class="input-group input-group-sm"><select id="emLoadSel" class="form-select"><option value="">— রোগী বাছাই করুন —</option></select>
+        <button class="btn btn-outline-primary" type="button" onclick="emLoadPatient()">লোড</button></div>
+        <div class="d-flex gap-2 mt-2"><button type="button" class="btn btn-sm btn-outline-secondary flex-fill" onclick="emClearForm()">নতুন করে লিখুন</button>
+        <button type="button" class="btn btn-sm btn-outline-dark flex-fill" onclick="openBlankPad()">ব্ল্যাংক প্যাড (সার্টিফিকেট ইত্যাদি)</button></div>
+      </div>`);
+    document.querySelector('[onclick="printEmergencyRx()"]').innerHTML = '<i class="fa-solid fa-eye me-1"></i>প্রিভিউ, এডিট ও প্রিন্ট';
+    function emFillList() {
+      db.transaction(["patients"], "readonly").objectStore("patients").getAll().onsuccess = e => {
+        document.getElementById('emLoadSel').innerHTML = '<option value="">— রোগী বাছাই করুন —</option>' +
+          e.target.result.reverse().map(p => `<option value="${p.id}">${esc(p.case_no)} — ${esc(p.patient_name)}</option>`).join('');
+      };
+    }
+    function emLoadPatient() {
+      const id = +document.getElementById('emLoadSel').value; if (!id) return;
+      db.transaction(["patients"], "readonly").objectStore("patients").get(id).onsuccess = e => {
+        const p = e.target.result; if (!p) return;
+        emClearForm(true); emPatient = { phone: p.phone, case_no: p.case_no };
+        const set = (i, v) => document.getElementById(i).value = v ?? '';
+        set('em_name', p.patient_name); set('em_age', p.age); set('em_gender', p.gender); set('em_complaint', p.disease_tag); set('em_advice', p.doctor_comments);
+        const lv = (p.visits || [])[(p.visits || []).length - 1];
+        document.getElementById('emMedsContainer').innerHTML = '';
+        if (lv && lv.meds && lv.meds.length) lv.meds.filter(m => m.name).forEach(m => addEmergencyMedRow(m.name + (m.scale ? ' [' + m.scale + ']' : ''), m.dose)); else addEmergencyMedRow();
+      };
+    }
+    function emClearForm(keepMeds) {
+      emPatient = null;
+      ['em_name', 'em_age', 'em_complaint', 'em_advice'].forEach(i => document.getElementById(i).value = '');
+      document.getElementById('em_date').value = todayStr();
+      if (!keepMeds) { document.getElementById('emMedsContainer').innerHTML = ''; addEmergencyMedRow(); }
+    }
+    function openBlankPad() { openRxEditor('pad', { blank: true, date: todayStr() }); }
   </script>
 </body>
 </html>
