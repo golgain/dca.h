@@ -1,0 +1,17 @@
+{
+  "name": "HomeoCare Pro",
+  "short_name": "HomeoCare",
+  "description": "হোমিওপ্যাথিক ক্লিনিক্যাল ও প্র্যাকটিস ম্যানেজমেন্ট",
+  "lang": "bn",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f766e",
+  "theme_color": "#0f766e",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml"}
+  ]
+}

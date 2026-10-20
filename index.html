@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <title>HomeoCare Pro - অ্যাডভান্সড ক্লিনিক্যাল ও প্র্যাকটিস ম্যানেজমেন্ট সিস্টেম</title>
+
+  <!-- PWA Manifest Data URI -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  
+  <!-- Bootstrap 5 CSS & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-teal: #0f766e;
+      --dark-teal: #134e4a;
+      --accent-mint: #ccfbf1;
+      --bg-slate: #f1f5f9;
+    }
+    body {
+      font-family: 'Hind Siliguri', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-slate);
+      color: #1e293b;
+      padding-bottom: 85px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .app-header {
+      background: linear-gradient(135deg, var(--dark-teal), var(--primary-teal));
+      color: white;
+      border-radius: 0 0 20px 20px;
+      padding: 16px 14px;
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.2);
+    }
+    .clinic-logo-img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid white;
+      background: white;
+    }
+    .doctor-avatar-img {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #5eead4;
+    }
+    .analytics-badge {
+      background: white;
+      border-radius: 10px;
+      padding: 8px 4px;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .analytics-badge .num {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary-teal);
+    }
+    .analytics-badge .lbl {
+      font-size: 0.68rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+    .section-head {
+      background-color: var(--accent-mint);
+      color: var(--dark-teal);
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 8px;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-box {
+      background: white;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .badge-label { font-size: 0.8rem; font-weight: 600; color: #475569; }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid #cbd5e1;
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 0 8px 0;
+      z-index: 1050;
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 0.65rem;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .bottom-nav button.active, .bottom-nav button:hover {
+      color: var(--primary-teal);
+    }
+    .bottom-nav button i { font-size: 1.1rem; }
+    .lsmc-row, .rx-visit-box {
+      background: #fafafa;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .med-row {
+      background: white;
+      border: 1px dashed #cbd5e1;
+      border-radius: 6px;
+      padding: 8px;
+      margin-bottom: 6px;
+    }
+    .img-preview {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .immutable-copyright {
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 11px;
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border: 1px dashed #94a3b8;
+      user-select: none;
+    }
+    .text-teal{color:var(--primary-teal)!important}
+    .btn-xs{padding:.1rem .45rem;font-size:.75rem}
+    .bottom-nav{padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+    .bottom-nav button{flex:1;min-width:0;padding:0;white-space:nowrap;font-size:.6rem}
+    @media print {
+      body { background: white; padding-bottom: 0; color: black; }
+      .no-print, .bottom-nav, .btn, #listView, #emergencyPadView, #guideView, #settingsModal, #rxModal { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- অ্যাপ হেডার ও চেম্বার পরিচিতি -->
+  <div class="app-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <img id="disp_clinic_logo" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23ffffff'/><text x='50' y='65' font-size='45' text-anchor='middle' fill='%230f766e' font-weight='bold'>Rx</text></svg>" class="clinic-logo-img" alt="Logo">
+        <div>
+          <h5 class="m-0 fw-bold" id="disp_clinic_name">হোমিওপ্যাথিক কিউর চেম্বার</h5>
+          <div class="small opacity-75" id="disp_doctor_details">ডাঃ এম. এ. রহমান (ডি.এইচ.এম.এস)</div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <img id="disp_doctor_photo" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%235eead4'/><text x='50' y='65' font-size='45' text-anchor='middle' fill='%23134e4a'>👨‍⚕️</text></svg>" class="doctor-avatar-img no-print" alt="Dr">
+        <span id="netBadge" class="badge bg-warning text-dark no-print" style="display:none">অফলাইন</span>
+        <button class="btn btn-sm btn-light rounded-circle shadow-sm no-print" data-bs-toggle="modal" data-bs-target="#settingsModal">
+          <i class="fa-solid fa-sliders text-teal"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-2">
+
+    <!-- রোগী দেখার লাইভ অ্যানালিটিক্স ড্যাশবোর্ড -->
+    <div id="backupBanner" class="alert alert-warning py-1 px-2 small no-print" style="display:none">⚠️ ৭ দিনের বেশি ব্যাকআপ নেওয়া হয়নি। <a href="#" onclick="exportDataBackup();return false">এখনই ব্যাকআপ নিন</a></div>
+    <div class="row g-2 mb-2 no-print" id="analyticsBar">
+      <div class="col-3">
+        <div class="analytics-badge">
+          <div class="num" id="stat_today">০</div>
+          <div class="lbl">আজকে</div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="analytics-badge">
+          <div class="num" id="stat_week">০</div>
+          <div class="lbl">এই সপ্তাহে</div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="analytics-badge">
+          <div class="num" id="stat_month">০</div>
+          <div class="lbl">এই মাসে</div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="analytics-badge">
+          <div class="num" id="stat_total">০</div>
+          <div class="lbl">মোট রোগী</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ট্যাব ১: কেস টেকিং ও ক্লাসিক্যাল প্রেসক্রিপশন -->
+    <div id="formView">
+      <form id="masterCaseForm">
+        <input type="hidden" name="id" id="patientId">
+
+        <!-- চেম্বার সিলেক্টর -->
+        <div class="card-box mb-2 p-2">
+          <div class="row align-items-center g-2">
+            <div class="col-md-6">
+              <label class="badge-label text-success"><i class="fa-solid fa-hospital me-1"></i>বর্তমান চেম্বার নির্বাচন করুন:</label>
+              <select class="form-select form-select-sm" id="active_chamber_select" onchange="switchActiveChamber()"></select>
+            </div>
+            <div class="col-md-6 small text-muted" id="active_chamber_address"></div>
+          </div>
+        </div>
+
+        <!-- ১. প্রোফাইল -->
+        <div class="section-head"><i class="fa-solid fa-id-card"></i> ১. রোগীর ব্যক্তিগত তথ্য ও রোগ শনাক্তকরণ</div>
+        <div class="card-box">
+          <div class="row g-2">
+            <div class="col-6 col-md-3">
+              <label class="badge-label">কেস আইডি:</label>
+              <input type="text" class="form-control form-control-sm" name="case_no" id="f_case_no" required>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="badge-label">তারিখ:</label>
+              <input type="date" class="form-control form-control-sm" name="entry_date" id="f_date">
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="badge-label">রোগীর নাম:</label>
+              <input type="text" class="form-control form-control-sm" name="patient_name" id="f_name" placeholder="যেমন: মো: লতিফ" required>
+            </div>
+            <div class="col-12">
+              <label class="badge-label text-primary"><i class="fa-solid fa-virus me-1"></i>রোগের নাম/শনাক্তকরণ (Disease/Diagnosis):</label>
+              <input type="text" class="form-control form-control-sm border-primary" name="disease_tag" id="f_disease" placeholder="যেমন: Inguinal Hernia, Psoriasis...">
+            </div>
+            <div class="col-4 col-md-2">
+              <label class="badge-label">বয়স:</label>
+              <input type="text" class="form-control form-control-sm" name="age" id="f_age">
+            </div>
+            <div class="col-4 col-md-3">
+              <label class="badge-label">লিঙ্গ:</label>
+              <select class="form-select form-select-sm" name="gender" id="f_gender">
+                <option value="">বাছাই</option>
+                <option>পুরুষ</option>
+                <option>নারী</option>
+                <option>শিশু</option>
+              </select>
+            </div>
+            <div class="col-4 col-md-3">
+              <label class="badge-label">বৈবাহিক অবস্থা:</label>
+              <select class="form-select form-select-sm" name="marital_status" id="f_marital">
+                <option value="">বাছাই</option>
+                <option>বিবাহিত</option>
+                <option>অবিবাহিত</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="badge-label">মোবাইল (WhatsApp):</label>
+              <input type="tel" class="form-control form-control-sm" name="phone" id="f_phone" placeholder="০১৭১১-xxxxxx">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="badge-label">পেশা:</label>
+              <input type="text" class="form-control form-control-sm" name="profession" id="f_profession">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="badge-label">ঠিকানা:</label>
+              <input type="text" class="form-control form-control-sm" name="address" id="f_address">
+            </div>
+          </div>
+        </div>
+
+        <!-- ২. বর্তমান কষ্ট (L-S-M-C) -->
+        <div class="section-head d-flex justify-content-between align-items-center">
+          <span><i class="fa-solid fa-notes-medical"></i> ২. কষ্ট ও অনুভূতি (L-S-M-C Matrix)</span>
+          <button type="button" class="btn btn-xs btn-outline-dark bg-white py-0 px-2" onclick="addLsmcRow()">+ যোগ</button>
+        </div>
+        <div class="card-box" id="lsmcContainer"></div>
+
+        <div class="card-box">
+          <label class="badge-label">রোগের কারণ/সূচনা (Causation / Ailments from):</label>
+          <input type="text" class="form-control form-control-sm" name="causation" id="f_causation" placeholder="শোক, ভয়, ঠান্ডা লাগা, মলমে চর্মরোগ দমন...">
+        </div>
+
+        <!-- ৩. P.Q.R.S, ডায়াথিসিস ও মায়াজম -->
+        <div class="section-head"><i class="fa-solid fa-star-of-life"></i> ৩. অদ্ভুত লক্ষণ (§153 P.Q.R.S), ডায়াথিসিস ও মায়াজম</div>
+        <div class="card-box">
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="badge-label text-danger">P.Q.R.S লক্ষণ (অস্বাভাবিক, বিরল ও অদ্ভুত):</label>
+              <textarea class="form-control form-control-sm border-danger" rows="2" name="pqrs_symptoms" id="f_pqrs" placeholder="এমন অদ্ভুত অনুভূতি যা সাধারণ রোগে দেখা যায় না..."></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="badge-label text-warning">আরোগ্যের পথে বাধা (Obstacles to Cure - §260):</label>
+              <textarea class="form-control form-control-sm" rows="2" name="obstacles_to_cure" id="f_obstacles" placeholder="অতিরিক্ত কফি, ধূমপান, নেশা, দীর্ঘদিন অ্যালোপ্যাথিক দমন..."></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="badge-label">ডায়াথিসিস বা ধাতুগত প্রবণতা (Diathesis):</label>
+              <select class="form-select form-select-sm" name="diathesis" id="f_diathesis">
+                <option value="">নির্বাচন করুন</option>
+                <option>Scrofulous (গ্ল্যান্ড ফোলা ও টনসিল প্রবণতা)</option>
+                <option>Rheumatic / Gouty (বাত ও সন্ধির কষ্ট)</option>
+                <option>Hemorrhagic (রক্তক্ষরণ প্রবণতা)</option>
+                <option>Allergic / Catarrhal (সর্দি-অ্যালার্জি প্রবণতা)</option>
+                <option>Lithic (পাথরি জমার প্রবণতা)</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="badge-label">প্রধান মায়াজম (Dominant Miasm):</label>
+              <select class="form-select form-select-sm" name="miasm" id="f_miasm">
+                <option value="">বাছাই</option>
+                <option>Psora (সোরা)</option>
+                <option>Sycosis (সাইকোসিস)</option>
+                <option>Syphilis (সিফিলিস)</option>
+                <option>Tubercular (টিউবারকুলার)</option>
+                <option>Mixed (মিশ্র)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ৪. অতীত ও পারিবারিক ইতিহাস -->
+        <div class="section-head"><i class="fa-solid fa-clock-rotate-left"></i> ৪. অতীত ও পারিবারিক ইতিহাস</div>
+        <div class="card-box">
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="badge-label">অতীত রোগের অবদমন (Past Illness & Suppressions):</label>
+              <textarea class="form-control form-control-sm" rows="2" name="past_history" id="f_past_history" placeholder="চর্মরোগ সাপ্রেশন, টাইফয়েড, টিকা, অ্যান্টিবায়োটিকের প্রভাব..."></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="badge-label">পারিবারিক ইতিহাস (Family Medical History):</label>
+              <textarea class="form-control form-control-sm" rows="2" name="family_history" id="f_family_history" placeholder="পিতা ও মাতার বংশে টিবি, ক্যান্সার, হাঁপানি, বাত..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ৫. শারীরিক সাধারণ লক্ষণ -->
+        <div class="section-head"><i class="fa-solid fa-person"></i> ৫. শারীরিক সাধারণ লক্ষণ (Physical Generals)</div>
+        <div class="card-box">
+          <div class="row g-2">
+            <div class="col-6 col-md-3">
+              <label class="badge-label">তাপকাতরতা (Thermal):</label>
+              <select class="form-select form-select-sm" name="thermal" id="f_thermal">
+                <option value="">বাছাই</option>
+                <option>শীতকাতর (Chilly)</option>
+                <option>গরমকাতর (Hot)</option>
+                <option>উভয়কাতর (Ambithermal)</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="badge-label">ক্ষুধা (Appetite):</label>
+              <input type="text" class="form-control form-control-sm" name="appetite" id="f_appetite">
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="badge-label">পিপাসা (Thirst):</label>
+              <input type="text" class="form-control form-control-sm" name="thirst" id="f_thirst">
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="badge-label">জিহ্বা (Tongue):</label>
+              <input type="text" class="form-control form-control-sm" name="tongue" id="f_tongue">
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="badge-label">খাদ্য পছন্দ (Desires):</label>
+              <input type="text" class="form-control form-control-sm" name="desires" id="f_desires" placeholder="মিষ্টি, লবণ, মাংস...">
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="badge-label">খাদ্য অপছন্দ (Aversions):</label>
+              <input type="text" class="form-control form-control-sm" name="aversions" id="f_aversions">
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="badge-label">ঘাম ও গন্ধ (Sweat):</label>
+              <input type="text" class="form-control form-control-sm" name="sweat" id="f_sweat">
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="badge-label">মল ও মূত্র (Stool & Urine):</label>
+              <input type="text" class="form-control form-control-sm" name="evacuation" id="f_evacuation">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="badge-label">ঘুম ও শোয়ার ভঙ্গি (Sleep):</label>
+              <input type="text" class="form-control form-control-sm" name="sleep" id="f_sleep">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="badge-label">স্বপ্ন (Dreams):</label>
+              <input type="text" class="form-control form-control-sm" name="dreams" id="f_dreams">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="badge-label">স্ত্রী রোগ/ঋতুস্রাব (Female History):</label>
+              <input type="text" class="form-control form-control-sm" name="female_history" id="f_female">
+            </div>
+          </div>
+        </div>
+
+        <!-- ৬. মানসিক লক্ষণ -->
+        <div class="section-head"><i class="fa-solid fa-brain"></i> ৬. মানসিক লক্ষণ (Mind & Disposition)</div>
+        <div class="card-box">
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="badge-label">মেজাজ ও ক্রোধ (Temperament):</label>
+              <textarea class="form-control form-control-sm" rows="2" name="mind_temperament" id="f_mind" placeholder="রাগ বেশি, সহজে কমে না, জেদী..."></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="badge-label">ভয় ও আশঙ্কা (Fears):</label>
+              <textarea class="form-control form-control-sm" rows="2" name="fears" id="f_fears" placeholder="অন্ধকার, উঁচু স্থান, মৃত্যুর ভয়..."></textarea>
+            </div>
+            <div class="col-6 col-md-6">
+              <label class="badge-label">সান্ত্বনায় উপশম/বৃদ্ধি:</label>
+              <select class="form-select form-select-sm" name="consolation" id="f_consolation">
+                <option value="">বাছাই</option>
+                <option>সান্ত্বনায় ভালো লাগে</option>
+                <option>সান্ত্বনায় বাড়ে/বিরক্ত হয়</option>
+                <option>উদাসীন</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-6">
+              <label class="badge-label">সঙ্গপ্রীতি (Company):</label>
+              <select class="form-select form-select-sm" name="company" id="f_company">
+                <option value="">বাছাই</option>
+                <option>সঙ্গ চায় (একা থাকতে পারে না)</option>
+                <option>নির্জনে একা থাকতে চায়</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ক্লিনিক্যাল ছবি সংরক্ষণ -->
+        <div class="section-head d-flex justify-content-between align-items-center">
+          <span><i class="fa-solid fa-camera"></i> ক্লিনিক্যাল ছবি (Skin/Tongue/Reports)</span>
+          <button type="button" class="btn btn-xs btn-outline-dark bg-white py-0 px-2" onclick="document.getElementById('imgUpload').click()">+ ছবি</button>
+        </div>
+        <div class="card-box">
+          <input type="file" id="imgUpload" accept="image/*" class="d-none" onchange="handleImageAttach(event)">
+          <div id="imageGallery" class="d-flex flex-wrap"></div>
+        </div>
+
+        <!-- ৭. চিকিৎসা ও ফলো-আপ রেজিস্টার -->
+        <div class="section-head d-flex justify-content-between align-items-center">
+          <span><i class="fa-solid fa-prescription-bottle-medical"></i> ৭. চিকিৎসা ও ফলো-আপ রেজিস্টার (মাল্টিপল ড্রাগ)</span>
+          <button type="button" class="btn btn-xs btn-outline-dark bg-white py-0 px-2" onclick="addVisitBox()">+ নতুন ভিজিট</button>
+        </div>
+        <div id="rxVisitContainer"></div>
+
+        <!-- ৮. মন্তব্য ও রেফারেল -->
+        <div class="section-head"><i class="fa-solid fa-comment-medical"></i> ৮. বিশেষ মন্তব্য, খাদ্যপথ্য ও রেফারেল</div>
+        <div class="card-box">
+          <textarea class="form-control form-control-sm" rows="2" name="doctor_comments" id="f_comments" placeholder="খাদ্যপথ্যের বিধিনিষেধ, সহকারী বায়োকেমিক বা অন্য চিকিৎসকের কাছে রেফারেল নোট..."></textarea>
+        </div>
+
+        <button type="button" id="btnDelete" class="btn btn-sm btn-outline-danger w-100 mb-2 no-print" style="display:none" onclick="deletePatient()"><i class="fa-solid fa-trash me-1"></i>এই রোগীর রেকর্ড মুছুন</button>
+
+        <!-- এআই সহকারী -->
+        <div class="card-box no-print text-center bg-light">
+          <h6 class="fw-bold text-teal mb-2"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> AI একক ঔষধ নির্বাচন সহকারী</h6>
+          <div class="d-flex justify-content-center gap-2">
+            <button type="button" class="btn btn-sm btn-dark" onclick="searchAI('chatgpt')"><i class="fa-solid fa-bolt me-1"></i> ChatGPT</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="searchAI('gemini')"><i class="fa-brands fa-google me-1"></i> Gemini</button>
+            <a class="btn btn-sm btn-outline-secondary" href="https://www.oorep.com/" target="_blank" rel="noopener"><i class="fa-solid fa-book me-1"></i>রেপার্টরি (OOREP)</a>
+          </div>
+        </div>
+
+        <!-- স্থায়ী কপিরাইট সত্যতা -->
+        <div class="immutable-copyright">
+          <strong>HomeoCare Pro Digital Clinical Framework</strong><br>
+          সিস্টেম আর্কিটেকচার ও ডেটাবেজ ডিজাইন করেছেন: <strong>জুয়েল (Jewel)</strong><br>
+          &copy; সর্বস্বত্ব সংরক্ষিত। অনুমতি ছাড়া এই সিস্টেমের অননুমোদিত রূপান্তর বা কপিরাইট অপসারণ আইনত দণ্ডনীয়।
+        </div>
+      </form>
+    </div>
+
+    <!-- ট্যাব ২: জরুরি পার্সোনাল প্রেসক্রিপশন প্যাড (Emergency Pad) -->
+    <div id="emergencyPadView" style="display: none;">
+      <div class="card-box">
+        <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
+          <i class="fa-solid fa-file-prescription me-2"></i>জরুরি প্রেসক্রিপশন প্যাড (Quick Pad)
+        </h5>
+        <div class="row g-2 mb-3">
+          <div class="col-6 col-md-3">
+            <label class="badge-label">তারিখ:</label>
+            <input type="date" class="form-control form-control-sm" id="em_date">
+          </div>
+          <div class="col-6 col-md-5">
+            <label class="badge-label">রোগীর নাম:</label>
+            <input type="text" class="form-control form-control-sm" id="em_name" placeholder="রোগীর নাম">
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="badge-label">বয়স:</label>
+            <input type="text" class="form-control form-control-sm" id="em_age">
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="badge-label">লিঙ্গ:</label>
+            <select class="form-select form-select-sm" id="em_gender">
+              <option>পুরুষ</option>
+              <option>নারী</option>
+              <option>শিশু</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="badge-label">রোগীর মূল সমস্যা / উপসর্গ:</label>
+            <input type="text" class="form-control form-control-sm" id="em_complaint" placeholder="সংক্ষেপে রোগের কষ্ট...">
+          </div>
+        </div>
+
+        <div class="border rounded p-2 mb-3 bg-light">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge-label text-primary"><i class="fa-solid fa-capsules me-1"></i>ঔষধসমূহ (একাধিক ঔষধ যুক্ত করুন):</span>
+            <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2" onclick="addEmergencyMedRow()">+ ঔষধ যোগ</button>
+          </div>
+          <div id="emMedsContainer"></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="badge-label">পরামর্শ ও সেবনবিধি:</label>
+          <textarea class="form-control form-control-sm" id="em_advice" rows="2" placeholder="খাবারের নিয়ম, সতর্কতা..."></textarea>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-success flex-fill" onclick="printEmergencyRx()">
+            <i class="fa-solid fa-print me-1"></i>প্যাডে সরাসরি প্রিন্ট
+          </button>
+          <button type="button" class="btn btn-outline-success flex-fill" onclick="sendEmergencyWhatsApp()">
+            <i class="fa-brands fa-whatsapp me-1"></i>WhatsApp এ পাঠান
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ট্যাব ৩: ইন-অ্যাপ সম্পূর্ণ গাইডলাইন -->
+    <div id="guideView" style="display: none;">
+      <div class="card-box">
+        <h5 class="fw-bold text-teal border-bottom pb-2 mb-3">
+          <i class="fa-solid fa-book-medical me-2"></i>হোমিওপ্যাথিক কেস টেকিং ও অ্যাপ ব্যবহারের মাস্টার গাইডলাইন
+        </h5>
+
+        <div class="accordion" id="guideAccordion">
+          <div class="accordion-item mb-2 border rounded">
+            <h2 class="accordion-header">
+              <button class="accordion-button fw-bold py-2 bg-light text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#g1">
+                ১. অ্যাপটি ইনস্টল ও প্রাথমিক সেটআপ
+              </button>
+            </h2>
+            <div id="g1" class="accordion-collapse collapse show">
+              <div class="accordion-body small">
+                <ul>
+                  <li><strong>মোবাইলে অ্যাপ হিসেবে ব্যবহার:</strong> ক্রোম ব্রাউজারে ফাইলটি খুলে ৩টি ডটে ক্লিক করে <strong>"Add to Home Screen"</strong> চাপুন। ফাইলগুলো (index.html, sw.js, manifest.webmanifest, আইকন) HTTPS হোস্টিং-এ (GitHub Pages/Netlify) রেখে একবার অনলাইনে খুললে পরে ইন্টারনেট ছাড়াই চলবে।</li>
+                  <li><strong>নতুন সুবিধা:</strong> ভিজিটে পরবর্তী তারিখ, ফি/জমা, কষ্টের স্কোর ও ভাইটাল লিখুন। "হিসাব" ট্যাবে আজকের ফলো-আপ, আয় ও বাকি দেখুন। সেটিংসে পিন লক দিন।</li>
+                  <li><strong>ডাক্তারের প্রোফাইল ও চেম্বার সেটআপ:</strong> উপরের গিয়ার আইকনে (⚙️) ক্লিক করে চেম্বারের নাম, চিকিৎসকের পূর্ণাঙ্গ ডিগ্রি, চেম্বার লোগো এবং একাধিক চেম্বার ঠিকানা যুক্ত করুন।</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item mb-2 border rounded">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold py-2 bg-light text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#g2">
+                ২. রোগীকে প্রশ্ন করার নিয়ম (অর্গানন §৮৪-৯১)
+              </button>
+            </h2>
+            <div id="g2" class="accordion-collapse collapse">
+              <div class="accordion-body small">
+                <ul>
+                  <li><strong>কখনোই লিডিং প্রশ্ন করবেন না:</strong> রোগীকে নিজের ভাষায় কষ্ট প্রকাশ করতে দিন।</li>
+                  <li><strong>L-S-M-C ম্যাট্রিক্স:</strong> অঙ্গের পার্শ্ব (Location), ব্যথার ধরণ (Sensation), হ্রাস `<` বৃদ্ধি `>` (Modalities) এবং আনুষঙ্গিক লক্ষণ (Concomitants) লিখুন।</li>
+                  <li><strong>P.Q.R.S লক্ষণ:</strong> অর্গানন §১৫৩ অনুযায়ী সাধারণ লক্ষণের চেয়ে অদ্ভুত ও বিরল লক্ষণকে সর্বোচ্চ অগ্রাধিকার দিন।</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item mb-2 border rounded">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold py-2 bg-light text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#g3">
+                ৩. একক ঔষধ ও স্কেল নির্বাচনের সূত্র
+              </button>
+            </h2>
+            <div id="g3" class="accordion-collapse collapse">
+              <div class="accordion-body small">
+                <ul>
+                  <li><strong>কেন্টের লক্ষণ স্তরক্রম:</strong> Mental Generals &gt; Physical Generals &gt; Particulars।</li>
+                  <li><strong>স্কেল নির্বাচন:</strong> ক্রনিক কেসে বৃদ্ধি এড়াতে <strong>৫০ সহস্রতমিক (LM/0)</strong> স্কেল এবং একিউট কেসে <strong>শততমিক (C/CH)</strong> স্কেল বেছে নিন।</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item mb-2 border rounded">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold py-2 bg-light text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#g4">
+                ৪. আজীবন গুগল ড্রাইভ ব্যাকআপ
+              </button>
+            </h2>
+            <div id="g4" class="accordion-collapse collapse">
+              <div class="accordion-body small">
+                <ul>
+                  <li>সেটিংস মেনু থেকে <strong>"ড্রাইভে রাখার ব্যাকআপ ফাইল ডাউনলোড"</strong> এ ক্লিক করে ফাইলটি আপনার Google Drive-এ সেভ রাখুন। ফোন পাল্টালেও সমস্ত রেকর্ড নিমেষেই রিস্টোর করা যাবে।</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ট্যাব: হিসাব ও ফলো-আপ -->
+    <div id="reportView" style="display:none">
+      <div class="row g-2 mb-2">
+        <div class="col-4"><div class="analytics-badge"><div class="num" id="rp_today">০</div><div class="lbl">আজকের আয় (৳)</div></div></div>
+        <div class="col-4"><div class="analytics-badge"><div class="num" id="rp_month">০</div><div class="lbl">মাসের আয় (৳)</div></div></div>
+        <div class="col-4"><div class="analytics-badge"><div class="num text-danger" id="rp_due">০</div><div class="lbl">মোট বাকি (৳)</div></div></div>
+      </div>
+      <div class="card-box"><h6 class="fw-bold text-success"><i class="fa-solid fa-bell me-1"></i>আজকের ফলো-আপ ও মিস (৩০ দিন)</h6><div id="rp_follow"></div></div>
+      <div class="card-box"><h6 class="fw-bold text-danger"><i class="fa-solid fa-hand-holding-dollar me-1"></i>বাকির তালিকা</h6><div id="rp_dues"></div></div>
+    </div>
+
+    <!-- ট্যাব ৪: রোগী তালিকা -->
+    <div id="listView" style="display: none;">
+      <div class="card-box">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="mb-0 fw-bold text-success"><i class="fa-solid fa-address-book me-1"></i> সংরক্ষিত রোগলিপি</h6>
+          <button class="btn btn-sm btn-success" onclick="showNewForm()"><i class="fa-solid fa-user-plus me-1"></i>নতুন রোগী</button>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" class="form-control" id="searchPatient" placeholder="নাম, মোবাইল বা কেস আইডি দিয়ে সার্চ..." oninput="filterPatients()">
+        </div>
+        <div class="list-group" id="patientListContainer"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- বটম নেভিগেশন বার (সবগুলো অপশন সহ) -->
+  <div class="bottom-nav no-print">
+    <button type="button" id="navNew" class="active" onclick="showNewForm()">
+      <i class="fa-solid fa-file-circle-plus"></i>নতুন কেস
+    </button>
+    <button type="button" id="navSave" onclick="savePatientRecord()">
+      <i class="fa-solid fa-floppy-disk"></i>সংরক্ষণ
+    </button>
+    <button type="button" id="navEmergency" onclick="showEmergencyPadView()">
+      <i class="fa-solid fa-file-prescription text-danger"></i>জরুরি
+    </button>
+    <button type="button" id="navList" onclick="showListView()">
+      <i class="fa-solid fa-list-check"></i>তালিকা
+    </button>
+    <button type="button" id="navReport" onclick="showReportView()"><i class="fa-solid fa-chart-line text-success"></i>হিসাব</button>
+    <button type="button" id="navGuide" onclick="showGuideView()">
+      <i class="fa-solid fa-book-open-reader text-warning"></i>গাইড
+    </button>
+    <button type="button" onclick="openRxModal()">
+      <i class="fa-solid fa-print text-primary"></i>Rx
+    </button>
+  </div>
+
+  <!-- প্রেসক্রিপশন প্রিভিউ মোডাল -->
+  <div class="modal fade" id="rxModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0 pb-0">
+          <h6 class="modal-title fw-bold">প্রেসক্রিপশন প্রিভিউ</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="rxPrintArea">
+          <div class="border p-3 rounded bg-white" style="font-size: 13px;">
+            <div class="text-center border-bottom pb-2 mb-2">
+              <h5 class="fw-bold m-0" id="pr_clinic"></h5>
+              <div class="small fw-semibold" id="pr_doc"></div>
+              <div class="small text-muted" id="pr_contact"></div>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+              <span><strong>রোগী:</strong> <span id="pr_name"></span></span>
+              <span><strong>বয়স/লিঙ্গ:</strong> <span id="pr_age"></span></span>
+            </div>
+            <div class="d-flex justify-content-between border-bottom pb-1 mb-2">
+              <span><strong>তারিখ:</strong> <span id="pr_date"></span></span>
+              <span><strong>আইডি:</strong> <span id="pr_id"></span></span>
+            </div>
+            <div class="mb-2"><strong>রোগ নির্ণয়:</strong> <span id="pr_disease"></span></div>
+            <div class="p-2 bg-light rounded border mb-2">
+              <div class="fw-bold text-primary mb-1">Rx (ঔষধসমূহ):</div>
+              <div id="pr_meds_list"></div>
+            </div>
+            <div class="small text-muted border-top pt-1 mt-2">
+              <strong>পরামর্শ:</strong> <span id="pr_comments"></span><br><strong>পরবর্তী ভিজিট:</strong> <span id="pr_next"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">বন্ধ</button>
+          <button type="button" class="btn btn-sm btn-success" onclick="printRxDirectly()">
+            <i class="fa-solid fa-print me-1"></i>প্রিন্ট দিন
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-success" onclick="sendWhatsAppPrescription()">
+            <i class="fa-brands fa-whatsapp me-1"></i>WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- চেম্বার ও সেটিংস মোডাল -->
+  <div class="modal fade" id="settingsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title fw-bold">ডাক্তার প্রোফাইল ও একাধিক চেম্বার সেটিংস</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-2 mb-3">
+            <div class="col-6 text-center">
+              <label class="badge-label d-block mb-1">লোগো:</label>
+              <input type="file" id="logoUpload" accept="image/*" class="d-none" onchange="handleLogoChange(event)">
+              <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('logoUpload').click()">লোগো নির্বাচন</button>
+            </div>
+            <div class="col-6 text-center">
+              <label class="badge-label d-block mb-1">ডাক্তারের ছবি:</label>
+              <input type="file" id="docPhotoUpload" accept="image/*" class="d-none" onchange="handleDocPhotoChange(event)">
+              <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('docPhotoUpload').click()">ছবি নির্বাচন</button>
+            </div>
+          </div>
+          <div class="mb-2">
+            <label class="badge-label">ডাক্তারের নাম ও পদবি/ডিগ্রি:</label>
+            <input type="text" class="form-control form-control-sm" id="cfg_doctor_name">
+          </div>
+
+          <hr>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge-label text-primary"><i class="fa-solid fa-house-chimney-medical me-1"></i>চেম্বার তালিকা (একাধিক চেম্বার যোগ করুন):</span>
+            <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2" onclick="addChamberConfigRow()">+ চেম্বার যোগ</button>
+          </div>
+          <div id="chamberConfigContainer"></div>
+
+          <div class="mb-2"><label class="badge-label"><i class="fa-solid fa-lock me-1"></i>অ্যাপ লক পিন (নতুন পিন দিলে সেভ হবে, ৪+ সংখ্যা):</label>
+            <div class="input-group input-group-sm"><input type="password" inputmode="numeric" class="form-control" id="cfg_pin" placeholder="নতুন পিন"><button type="button" class="btn btn-outline-danger" onclick="clearPin()">লক বন্ধ</button></div></div>
+          <button class="btn btn-success btn-sm w-100 my-3" onclick="saveDoctorProfile()">সেটিংস সেভ করুন</button>
+
+          <hr>
+          <button type="button" class="btn btn-outline-dark btn-sm w-100 mb-2" onclick="installApp()"><i class="fa-solid fa-mobile-screen me-1"></i>অ্যাপ ইনস্টল করুন</button>
+          <button type="button" class="btn btn-outline-success btn-sm w-100 mb-2" onclick="exportCSV()"><i class="fa-solid fa-file-csv me-1"></i>রোগী তালিকা (CSV/Excel) ডাউনলোড</button>
+          <div class="fw-bold mb-1 text-primary small">গুগল ড্রাইভে আজীবন ব্যাকআপ (JSON):</div>
+          <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="exportDataBackup()">
+            <i class="fa-solid fa-cloud-arrow-down me-1"></i>ড্রাইভে রাখার ব্যাকআপ ফাইল ডাউনলোড
+          </button>
+          <input type="file" id="importFileInput" class="d-none" onchange="importDataBackup(event)">
+          <button class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('importFileInput').click()">
+            <i class="fa-solid fa-file-import me-1"></i>ব্যাকআপ ফাইল থেকে ডেটা রিস্টোর
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <datalist id="remedyList"></datalist>
+  <div id="lockScreen" style="display:none;position:fixed;inset:0;z-index:3000;background:linear-gradient(135deg,#134e4a,#0f766e);color:#fff;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center">
+    <h4 class="fw-bold mb-3"><i class="fa-solid fa-lock me-2"></i>HomeoCare Pro</h4>
+    <input type="password" inputmode="numeric" id="lockPin" class="form-control text-center mb-2" style="max-width:220px" placeholder="পিন দিন" onkeydown="if(event.key==='Enter')unlockApp()">
+    <button class="btn btn-light" onclick="unlockApp()">খুলুন</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let db;
+    let currentAttachedImages = [];
+    let allPatientsCache = [];
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const bnToEn = s => String(s ?? '').replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d));
+    const toBn = n => String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+    const pad2 = n => String(n).padStart(2, '0');
+    const todayStr = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+    const vFee = v => +bnToEn(v.fee) || 0;
+    const vPaid = v => (v.paid === '' || v.paid == null) ? vFee(v) : (+bnToEn(v.paid) || 0);
+    const waNum = ph => { let n = bnToEn(ph || '').replace(/[^0-9]/g, ''); if (n.startsWith('01')) n = '88' + n; return n; };
+    function dl(blob, name) {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    }
+    function copyText(t) {
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+      return new Promise(r => { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); } catch {} a.remove(); r(); });
+    }
+    function compressImg(file, max, q) {
+      return new Promise(res => {
+        const r = new FileReader();
+        r.onload = e => {
+          const im = new Image();
+          im.onload = () => {
+            const k = Math.min(1, max / Math.max(im.width, im.height));
+            const c = document.createElement('canvas'); c.width = im.width * k; c.height = im.height * k;
+            const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+            res(c.toDataURL('image/jpeg', q));
+          };
+          im.onerror = () => res(e.target.result);
+          im.src = e.target.result;
+        };
+        r.readAsDataURL(file);
+      });
+    }
+    const request = indexedDB.open("HomeoCarePro_FinalMaster_v7", 1);
+    request.onerror = () => alert("ডেটাবেজ চালু করা যায়নি (প্রাইভেট মোড?)।");
+
+    request.onupgradeneeded = function(e) {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains("patients")) {
+        const store = db.createObjectStore("patients", { keyPath: "id", autoIncrement: true });
+        store.createIndex("case_no", "case_no", { unique: false });
+        store.createIndex("patient_name", "patient_name", { unique: false });
+        store.createIndex("phone", "phone", { unique: false });
+      }
+    };
+
+    request.onsuccess = function(e) {
+      db = e.target.result;
+      loadDoctorProfile();
+      initDefaultForm();
+      updateAnalytics();
+    };
+
+    function loadDoctorProfile() {
+      const doc = localStorage.getItem('doctor_name') || "ডাঃ এম. এ. রহমান, ডি.এইচ.এম.এস (কনসালট্যান্ট)";
+      const logo = localStorage.getItem('custom_clinic_logo') || document.getElementById('disp_clinic_logo').src;
+      const photo = localStorage.getItem('custom_doc_photo') || document.getElementById('disp_doctor_photo').src;
+
+      document.getElementById('disp_doctor_details').innerText = doc;
+      document.getElementById('disp_clinic_logo').src = logo;
+      document.getElementById('disp_doctor_photo').src = photo;
+      document.getElementById('cfg_doctor_name').value = doc;
+
+      let chambers = JSON.parse(localStorage.getItem('clinic_chambers') || '[]');
+      if (chambers.length === 0) {
+        chambers = [{ name: "হোমিওপ্যাথিক কিউর চেম্বার", address: "রাজশাহী | মোবাইল: ০১৭১১-০০০০০০" }];
+        localStorage.setItem('clinic_chambers', JSON.stringify(chambers));
+      }
+
+      const sel = document.getElementById('active_chamber_select');
+      sel.innerHTML = '';
+      chambers.forEach((c, idx) => {
+        sel.insertAdjacentHTML('beforeend', `<option value="${idx}">${esc(c.name)}</option>`);
+      });
+      switchActiveChamber();
+    }
+
+    function switchActiveChamber() {
+      const chambers = JSON.parse(localStorage.getItem('clinic_chambers') || '[]');
+      const selIdx = document.getElementById('active_chamber_select').value;
+      if (chambers[selIdx]) {
+        document.getElementById('disp_clinic_name').innerText = chambers[selIdx].name;
+        document.getElementById('active_chamber_address').innerText = chambers[selIdx].address;
+      }
+    }
+
+    function addChamberConfigRow(name = '', addr = '') {
+      const container = document.getElementById('chamberConfigContainer');
+      const id = Date.now() + Math.random().toString(36).substr(2, 4);
+      container.insertAdjacentHTML('beforeend', `
+        <div class="row g-2 mb-2 p-2 border rounded bg-light" id="ch_${id}">
+          <div class="col-md-5">
+            <input type="text" class="form-control form-control-sm ch-name" placeholder="চেম্বারের নাম" value="${esc(name)}">
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control form-control-sm ch-addr" placeholder="ঠিকানা ও মোবাইল" value="${esc(addr)}">
+          </div>
+          <div class="col-md-1 text-center">
+            <button type="button" class="btn btn-link text-danger p-0" onclick="document.getElementById('ch_${id}').remove()">&times;</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function saveDoctorProfile() {
+      savePin();
+      localStorage.setItem('doctor_name', document.getElementById('cfg_doctor_name').value);
+      const chamberRows = document.querySelectorAll('#chamberConfigContainer > div');
+      const chambers = [];
+      chamberRows.forEach(row => {
+        const name = row.querySelector('.ch-name').value;
+        const addr = row.querySelector('.ch-addr').value;
+        if (name) chambers.push({ name, address: addr });
+      });
+      if (chambers.length > 0) {
+        localStorage.setItem('clinic_chambers', JSON.stringify(chambers));
+      }
+      loadDoctorProfile();
+      bootstrap.Modal.getInstance(document.getElementById('settingsModal')).hide();
+      alert("চেম্বার সেটিংস সংরক্ষিত হয়েছে!");
+    }
+
+    function handleLogoChange(e) {
+      const f = e.target.files[0]; if (!f) return;
+      compressImg(f, 256, .85).then(d => {
+        try { localStorage.setItem('custom_clinic_logo', d); document.getElementById('disp_clinic_logo').src = d; }
+        catch { alert('ছবি সংরক্ষণ করা যায়নি।'); }
+      });
+      e.target.value = '';
+    }
+
+    function handleDocPhotoChange(e) {
+      const f = e.target.files[0]; if (!f) return;
+      compressImg(f, 256, .85).then(d => {
+        try { localStorage.setItem('custom_doc_photo', d); document.getElementById('disp_doctor_photo').src = d; }
+        catch { alert('ছবি সংরক্ষণ করা যায়নি।'); }
+      });
+      e.target.value = '';
+    }
+
+    function handleImageAttach(event) {
+      const f = event.target.files[0]; if (!f) return;
+      compressImg(f, 1024, .72).then(d => { currentAttachedImages.push(d); renderImageGallery(); });
+      event.target.value = '';
+    }
+
+    function renderImageGallery() {
+      const gal = document.getElementById('imageGallery');
+      gal.innerHTML = '';
+      currentAttachedImages.forEach((img, i) => {
+        gal.insertAdjacentHTML('beforeend', `
+          <div class="position-relative d-inline-block">
+            <img src="${esc(img)}" class="img-preview">
+            <button type="button" class="btn btn-danger position-absolute top-0 start-0 p-0 rounded-circle text-center" 
+                    style="width:18px;height:18px;line-height:16px;font-size:10px;" onclick="currentAttachedImages.splice(${i},1);renderImageGallery();">&times;</button>
+          </div>`);
+      });
+    }
+
+    function updateAnalytics() {
+      if (!db) return;
+      db.transaction(["patients"], "readonly").objectStore("patients").getAll().onsuccess = (e) => {
+        allPatientsCache = e.target.result;
+        const t = todayStr(), w = todayStr(new Date(Date.now() - 6 * 864e5)), m = t.slice(0, 7);
+        let a = 0, b = 0, c = 0;
+        allPatientsCache.forEach(p => {
+          const days = [p.entry_date, ...(p.visits || []).map(v => v.date)].filter(Boolean);
+          if (days.includes(t)) a++;
+          if (days.some(d => d >= w && d <= t)) b++;
+          if (days.some(d => d.slice(0, 7) === m)) c++;
+        });
+        document.getElementById('stat_today').innerText = toBn(a);
+        document.getElementById('stat_week').innerText = toBn(b);
+        document.getElementById('stat_month').innerText = toBn(c);
+        document.getElementById('stat_total').innerText = toBn(allPatientsCache.length);
+        renderBackupBanner();
+      };
+    }
+
+    function addVisitBox(visitData = {}) {
+      const container = document.getElementById('rxVisitContainer');
+      const visitId = Date.now() + Math.random().toString(36).substr(2, 4);
+      const isNew = !visitData.date;
+      container.insertAdjacentHTML('beforeend', `
+        <div class="rx-visit-box" id="visit_${visitId}">
+          <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
+            <span class="badge-label text-success"><i class="fa-solid fa-calendar-check me-1"></i>ভিজিট তারিখ:</span>
+            <button type="button" class="btn btn-link text-danger p-0 text-decoration-none no-print" onclick="document.getElementById('visit_${visitId}').remove()">&times; ভিজিট মুছুন</button>
+          </div>
+          <div class="row g-2 mb-2">
+            <div class="col-6 col-md-3"><input type="date" class="form-control form-control-sm visit-date" value="${esc(visitData.date || todayStr())}"></div>
+            <div class="col-6 col-md-4">
+              <select class="form-select form-select-sm visit-eval">
+                <option value="উন্নতি (Amelioration)">উন্নতি (Amelioration)</option>
+                <option value="সাময়িক বৃদ্ধি">সাময়িক বৃদ্ধি (Homeo Agg)</option>
+                <option value="পরিবর্তনহীন">পরিবর্তনহীন (No Change)</option>
+                <option value="নতুন লক্ষণ">নতুন লক্ষণ (New Symptoms)</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-5"><input type="text" class="form-control form-control-sm visit-notes" placeholder="ফলো-আপ মন্তব্য..." value="${esc(visitData.notes)}"></div>
+          </div>
+          <div class="row g-2 mb-2">
+            <div class="col-4 col-md-2"><label class="badge-label">কষ্ট (০-১০)</label><input type="text" inputmode="numeric" class="form-control form-control-sm visit-score" value="${esc(visitData.score)}"></div>
+            <div class="col-8 col-md-4"><label class="badge-label">ভাইটাল (ওজন/বিপি/পালস)</label><input type="text" class="form-control form-control-sm visit-vit" value="${esc(visitData.vit)}"></div>
+            <div class="col-12 col-md-2"><label class="badge-label">পরবর্তী ভিজিট</label><input type="date" class="form-control form-control-sm visit-next" value="${esc(visitData.next)}"></div>
+            <div class="col-6 col-md-2"><label class="badge-label">ফি (৳)</label><input type="text" inputmode="numeric" class="form-control form-control-sm visit-fee" value="${esc(isNew ? localStorage.getItem('default_fee') : visitData.fee)}"></div>
+            <div class="col-6 col-md-2"><label class="badge-label">জমা (খালি=পূর্ণ)</label><input type="text" inputmode="numeric" class="form-control form-control-sm visit-paid" value="${esc(visitData.paid)}"></div>
+          </div>
+          <div class="p-2 border rounded bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="badge-label text-primary"><i class="fa-solid fa-pills me-1"></i>ঔষধসমূহ:</span>
+              <button type="button" class="btn btn-xs btn-outline-primary py-0 px-2" onclick="addMedRowToVisit('meds_${visitId}')">+ ঔষধ যোগ</button>
+            </div>
+            <div id="meds_${visitId}"></div>
+          </div>
+        </div>`);
+      if (visitData.eval) document.querySelector(`#visit_${visitId} .visit-eval`).value = visitData.eval;
+      if (visitData.meds && visitData.meds.length > 0) visitData.meds.forEach(m => addMedRowToVisit(`meds_${visitId}`, m));
+      else addMedRowToVisit(`meds_${visitId}`);
+    }
+
+    function addMedRowToVisit(containerId, medData = {}) {
+      const container = document.getElementById(containerId);
+      const rowId = Date.now() + Math.random().toString(36).substr(2, 4);
+      container.insertAdjacentHTML('beforeend', `
+        <div class="med-row row g-1 align-items-center" id="med_${rowId}">
+          <div class="col-5 col-md-4"><input type="text" class="form-control form-control-sm med-name" list="remedyList" placeholder="ঔষধ ও শক্তি (Lycopodium 200)" value="${esc(medData.name)}"></div>
+          <div class="col-3 col-md-2">
+            <select class="form-select form-select-sm med-scale">
+              <option value="C/CH">C/CH</option><option value="LM/0">LM/0</option><option value="X/D">X/D</option><option value="Q">Q (মাদার)</option>
+            </select>
+          </div>
+          <div class="col-3 col-md-5"><input type="text" class="form-control form-control-sm med-dose" placeholder="মাত্রা ও সেবনবিধি" value="${esc(medData.dose)}"></div>
+          <div class="col-1 text-center"><button type="button" class="btn btn-link text-danger p-0" onclick="document.getElementById('med_${rowId}').remove()">&times;</button></div>
+        </div>`);
+      if (medData.scale) document.querySelector(`#med_${rowId} .med-scale`).value = medData.scale;
+    }
+
+    function addLsmcRow(data = {}) {
+      const container = document.getElementById('lsmcContainer');
+      const rowId = Date.now() + Math.random().toString(36).substr(2, 4);
+      container.insertAdjacentHTML('beforeend', `
+        <div class="lsmc-row" id="lsmc_${rowId}">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="badge-label">লক্ষণ বিশদ</span>
+            <button type="button" class="btn btn-link text-danger p-0 text-decoration-none no-print" onclick="document.getElementById('lsmc_${rowId}').remove()">&times;</button>
+          </div>
+          <div class="row g-2">
+            <div class="col-md-3"><input type="text" class="form-control form-control-sm lsmc-loc" placeholder="স্থান/পার্শ্ব" value="${esc(data.loc)}"></div>
+            <div class="col-md-3"><input type="text" class="form-control form-control-sm lsmc-sens" placeholder="অনুভূতির ধরন" value="${esc(data.sens)}"></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm lsmc-agg" placeholder="বৃদ্ধি <" value="${esc(data.agg)}"></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm lsmc-amel" placeholder="উপশম >" value="${esc(data.amel)}"></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm lsmc-conc" placeholder="আনুষঙ্গিক" value="${esc(data.conc)}"></div>
+          </div>
+        </div>
+      `);
+    }
+
+    function initDefaultForm() {
+      document.getElementById('patientId').value = '';
+      document.getElementById('masterCaseForm').reset();
+      document.getElementById('f_date').value = todayStr();
+      assignCaseNo();
+      document.getElementById('lsmcContainer').innerHTML = '';
+      document.getElementById('rxVisitContainer').innerHTML = '';
+      currentAttachedImages = [];
+      renderImageGallery();
+      addLsmcRow();
+      addVisitBox();
+    }
+    function assignCaseNo() {
+      const f = document.getElementById('f_case_no');
+      f.value = 'HC-' + Date.now().toString().slice(-6);
+      if (!db) return;
+      let mx = 0;
+      db.transaction(["patients"], "readonly").objectStore("patients").index("case_no").openKeyCursor().onsuccess = ev => {
+        const c = ev.target.result;
+        if (c) { const m = /(\d+)$/.exec(c.key || ''); if (m) mx = Math.max(mx, +m[1]); c.continue(); }
+        else if (!document.getElementById('patientId').value) f.value = 'HC-' + String(mx + 1).padStart(4, '0');
+      };
+    }
+
+    function savePatientRecord() {
+      if (!document.getElementById('f_name').value) {
+        alert("রোগীর নাম অবশ্যই লিখতে হবে!");
+        return;
+      }
+
+      const lsmcList = [];
+      document.querySelectorAll('.lsmc-row').forEach(row => {
+        lsmcList.push({
+          loc: row.querySelector('.lsmc-loc').value,
+          sens: row.querySelector('.lsmc-sens').value,
+          agg: row.querySelector('.lsmc-agg').value,
+          amel: row.querySelector('.lsmc-amel').value,
+          conc: row.querySelector('.lsmc-conc').value
+        });
+      });
+
+      const visits = [];
+      document.querySelectorAll('#rxVisitContainer > .rx-visit-box').forEach(box => {
+        const vDate = box.querySelector('.visit-date').value;
+        const vEval = box.querySelector('.visit-eval').value;
+        const vNotes = box.querySelector('.visit-notes').value;
+        const vx = c => box.querySelector('.visit-' + c).value.trim();
+        if (vx('fee')) localStorage.setItem('default_fee', vx('fee'));
+        const meds = [];
+        box.querySelectorAll('.med-row').forEach(mr => {
+          meds.push({
+            name: mr.querySelector('.med-name').value,
+            scale: mr.querySelector('.med-scale').value,
+            dose: mr.querySelector('.med-dose').value
+          });
+        });
+        visits.push({ date: vDate, eval: vEval, notes: vNotes, meds: meds, score: vx('score'), vit: vx('vit'), next: vx('next'), fee: vx('fee'), paid: vx('paid') });
+      });
+
+      const patientData = {
+        case_no: document.getElementById('f_case_no').value,
+        entry_date: document.getElementById('f_date').value,
+        patient_name: document.getElementById('f_name').value,
+        disease_tag: document.getElementById('f_disease').value,
+        age: document.getElementById('f_age').value,
+        gender: document.getElementById('f_gender').value,
+        marital_status: document.getElementById('f_marital').value,
+        phone: document.getElementById('f_phone').value,
+        profession: document.getElementById('f_profession').value,
+        address: document.getElementById('f_address').value,
+        causation: document.getElementById('f_causation').value,
+        pqrs_symptoms: document.getElementById('f_pqrs').value,
+        obstacles_to_cure: document.getElementById('f_obstacles').value,
+        diathesis: document.getElementById('f_diathesis').value,
+        past_history: document.getElementById('f_past_history').value,
+        family_history: document.getElementById('f_family_history').value,
+        thermal: document.getElementById('f_thermal').value,
+        appetite: document.getElementById('f_appetite').value,
+        thirst: document.getElementById('f_thirst').value,
+        tongue: document.getElementById('f_tongue').value,
+        desires: document.getElementById('f_desires').value,
+        aversions: document.getElementById('f_aversions').value,
+        sweat: document.getElementById('f_sweat').value,
+        evacuation: document.getElementById('f_evacuation').value,
+        sleep: document.getElementById('f_sleep').value,
+        dreams: document.getElementById('f_dreams').value,
+        female_history: document.getElementById('f_female').value,
+        mind_temperament: document.getElementById('f_mind').value,
+        fears: document.getElementById('f_fears').value,
+        consolation: document.getElementById('f_consolation').value,
+        company: document.getElementById('f_company').value,
+        miasm: document.getElementById('f_miasm').value,
+        doctor_comments: document.getElementById('f_comments').value,
+        images: currentAttachedImages,
+        lsmc: lsmcList,
+        visits: visits,
+        updated_at: new Date().getTime()
+      };
+
+      const existingId = document.getElementById('patientId').value;
+      const tx = db.transaction(["patients"], "readwrite");
+      const store = tx.objectStore("patients");
+      tx.onerror = () => alert("সংরক্ষণ ব্যর্থ হয়েছে! স্টোরেজ ভর্তি হতে পারে।");
+
+      if (existingId) {
+        patientData.id = parseInt(existingId);
+        store.put(patientData);
+      } else {
+        store.add(patientData);
+      }
+
+      tx.oncomplete = () => {
+        alert("রোগীর ডিজিটাল কেস হিস্ট্রি সফলভাবে সংরক্ষিত হয়েছে!");
+        updateAnalytics();
+        showListView();
+      };
+    }
+
+    function setView(v) {
+      const vid = { form: 'formView', emergency: 'emergencyPadView', list: 'listView', guide: 'guideView', report: 'reportView' };
+      Object.entries(vid).forEach(([k, id]) => document.getElementById(id).style.display = k === v ? 'block' : 'none');
+      const nav = { form: 'navNew', emergency: 'navEmergency', list: 'navList', guide: 'navGuide', report: 'navReport' };
+      Object.entries(nav).forEach(([k, id]) => document.getElementById(id).classList.toggle('active', k === v));
+      document.getElementById('btnDelete').style.display = (v === 'form' && document.getElementById('patientId').value) ? '' : 'none';
+      window.scrollTo(0, 0);
+    }
+    function showListView() {
+      setView('list');
+      db.transaction(["patients"], "readonly").objectStore("patients").getAll().onsuccess = (e) => {
+        allPatientsCache = e.target.result.reverse();
+        filterPatients();
+      };
+    }
+
+    function renderPatientList(list) {
+      const c = document.getElementById('patientListContainer');
+      if (!list.length) { c.innerHTML = '<div class="text-center text-muted p-4">কোনো সংরক্ষিত রেকর্ড পাওয়া যায়নি।</div>'; return; }
+      c.innerHTML = list.map(p => {
+        const V = p.visits || [], lv = V[V.length - 1] || {};
+        const meds = (lv.meds || []).map(m => m.name).filter(Boolean).join(', ') || 'কোনো ঔষধ নেই';
+        const sc = V.map(v => v.score).filter(x => x !== '' && x != null).join('→');
+        const due = V.reduce((a, v) => a + Math.max(0, vFee(v) - vPaid(v)), 0);
+        return `
+          <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-1 border rounded" onclick="loadPatientForEdit(${p.id})">
+            <div>
+              <div class="fw-bold text-teal">${esc(p.patient_name)} <span class="badge bg-light text-dark border ms-1">${esc(p.case_no)}</span></div>
+              <small class="text-danger fw-semibold"><i class="fa-solid fa-virus me-1"></i>${esc(p.disease_tag) || 'অনির্দিষ্ট'}</small> |
+              <small class="text-muted">${esc(p.phone) || 'মোবাইল নেই'}</small>
+              <div class="small text-muted mt-1"><i class="fa-solid fa-capsules text-teal me-1"></i>Rx: <strong>${esc(meds)}</strong></div>
+              <div class="small mt-1">${lv.next ? `<span class="badge bg-info text-dark me-1">ফলো-আপ: ${esc(lv.next)}</span>` : ''}${due ? `<span class="badge bg-danger me-1">বাকি ৳${toBn(due)}</span>` : ''}${sc ? `<span class="text-muted">কষ্ট: ${esc(toBn(sc))}</span>` : ''}</div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-muted"></i>
+          </div>`;
+      }).join('');
+    }
+
+    function filterPatients() {
+      const q = bnToEn(document.getElementById('searchPatient').value).toLowerCase();
+      renderPatientList(allPatientsCache.filter(p =>
+        (p.patient_name && p.patient_name.toLowerCase().includes(q)) ||
+        (p.case_no && p.case_no.toLowerCase().includes(q)) ||
+        (p.disease_tag && p.disease_tag.toLowerCase().includes(q)) ||
+        (p.phone && bnToEn(p.phone).includes(q))));
+    }
+
+    function loadPatientForEdit(id) {
+      db.transaction(["patients"], "readonly").objectStore("patients").get(id).onsuccess = (e) => {
+        const p = e.target.result;
+        if (!p) return;
+
+        document.getElementById('patientId').value = p.id;
+        document.getElementById('f_case_no').value = p.case_no;
+        document.getElementById('f_date').value = p.entry_date;
+        document.getElementById('f_name').value = p.patient_name;
+        document.getElementById('f_disease').value = p.disease_tag || '';
+        document.getElementById('f_age').value = p.age;
+        document.getElementById('f_gender').value = p.gender;
+        document.getElementById('f_marital').value = p.marital_status;
+        document.getElementById('f_phone').value = p.phone;
+        document.getElementById('f_profession').value = p.profession;
+        document.getElementById('f_address').value = p.address;
+        document.getElementById('f_causation').value = p.causation;
+        document.getElementById('f_pqrs').value = p.pqrs_symptoms || '';
+        document.getElementById('f_obstacles').value = p.obstacles_to_cure || '';
+        document.getElementById('f_diathesis').value = p.diathesis || '';
+        document.getElementById('f_past_history').value = p.past_history;
+        document.getElementById('f_family_history').value = p.family_history;
+        document.getElementById('f_thermal').value = p.thermal;
+        document.getElementById('f_appetite').value = p.appetite;
+        document.getElementById('f_thirst').value = p.thirst;
+        document.getElementById('f_tongue').value = p.tongue;
+        document.getElementById('f_desires').value = p.desires;
+        document.getElementById('f_aversions').value = p.aversions;
+        document.getElementById('f_sweat').value = p.sweat;
+        document.getElementById('f_evacuation').value = p.evacuation;
+        document.getElementById('f_sleep').value = p.sleep;
+        document.getElementById('f_dreams').value = p.dreams;
+        document.getElementById('f_female').value = p.female_history;
+        document.getElementById('f_mind').value = p.mind_temperament;
+        document.getElementById('f_fears').value = p.fears;
+        document.getElementById('f_consolation').value = p.consolation;
+        document.getElementById('f_company').value = p.company;
+        document.getElementById('f_miasm').value = p.miasm;
+        document.getElementById('f_comments').value = p.doctor_comments || '';
+
+        currentAttachedImages = p.images || [];
+        renderImageGallery();
+
+        document.getElementById('lsmcContainer').innerHTML = '';
+        if (p.lsmc && p.lsmc.length > 0) p.lsmc.forEach(l => addLsmcRow(l)); else addLsmcRow();
+
+        document.getElementById('rxVisitContainer').innerHTML = '';
+        if (p.visits && p.visits.length > 0) {
+          p.visits.forEach(v => addVisitBox(v));
+        } else {
+          addVisitBox();
+        }
+
+        showFormViewOnly();
+      };
+    }
+
+    function showNewForm() {
+      initDefaultForm();
+      showFormViewOnly();
+    }
+
+    function showFormViewOnly() { setView('form'); }
+
+    function showGuideView() { setView('guide'); }
+
+    function showEmergencyPadView() {
+      setView('emergency');
+      const d = document.getElementById('em_date'); if (!d.value) d.value = todayStr();
+      if (!document.getElementById('emMedsContainer').children.length) addEmergencyMedRow();
+    }
+    function showReportView() { setView('report'); renderReport(); }
+
+    function addEmergencyMedRow(name = '', dose = '') {
+      const container = document.getElementById('emMedsContainer');
+      const id = Date.now() + Math.random().toString(36).substr(2, 4);
+      container.insertAdjacentHTML('beforeend', `
+        <div class="row g-1 align-items-center mb-1" id="em_${id}">
+          <div class="col-6">
+            <input type="text" class="form-control form-control-sm em-name" list="remedyList" placeholder="ঔষধ ও শক্তি" value="${esc(name)}">
+          </div>
+          <div class="col-5">
+            <input type="text" class="form-control form-control-sm em-dose" placeholder="সেবনমাত্রা" value="${esc(dose)}">
+          </div>
+          <div class="col-1 text-center">
+            <button type="button" class="btn btn-link text-danger p-0" onclick="document.getElementById('em_${id}').remove()">&times;</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function printEmergencyRx() {
+      const name = document.getElementById('em_name').value || 'নাম প্রকাশে অনিচ্ছুক';
+      const age = document.getElementById('em_age').value || 'N/A';
+      const complaint = document.getElementById('em_complaint').value || 'জরুরি কেস';
+      const date = document.getElementById('em_date').value;
+      const advice = document.getElementById('em_advice').value || 'নিয়ম মেনে চলুন।';
+
+      let medsHtml = '';
+      document.querySelectorAll('#emMedsContainer > div').forEach((row, i) => {
+        const m = row.querySelector('.em-name').value;
+        const d = row.querySelector('.em-dose').value;
+        if (m) medsHtml += `<div><strong>${i+1}. ${esc(m)}</strong> — <em>${esc(d)}</em></div>`;
+      });
+
+      triggerDirectPrint({
+        clinic: document.getElementById('disp_clinic_name').innerText,
+        doc: localStorage.getItem('doctor_name') || '',
+        contact: document.getElementById('active_chamber_address').innerText,
+        name: name,
+        age: age,
+        id: 'EM-' + Math.floor(100 + Math.random() * 900),
+        date: date,
+        disease: complaint,
+        meds: medsHtml || 'কোনো ঔষধ লেখা হয়নি',
+        comments: advice
+      });
+    }
+
+    function sendEmergencyWhatsApp() {
+      const name = document.getElementById('em_name').value;
+      if (!name) { alert("রোগীর নাম লিখুন!"); return; }
+
+      let msg = `*${document.getElementById('disp_clinic_name').innerText}*\n`;
+      msg += `${localStorage.getItem('doctor_name') || ''}\n\n`;
+      msg += `*রোগী:* ${name}\n*তারিখ:* ${document.getElementById('em_date').value}\n`;
+      msg += `------------------------------------\n*Rx (জরুরি প্রেসক্রিপশন):*\n`;
+
+      document.querySelectorAll('#emMedsContainer > div').forEach((row, i) => {
+        const m = row.querySelector('.em-name').value;
+        const d = row.querySelector('.em-dose').value;
+        if (m) msg += `${i+1}. *${m}* — ${d}\n`;
+      });
+
+      if (document.getElementById('em_advice').value) {
+        msg += `\n*পরামর্শ:* ${document.getElementById('em_advice').value}\n`;
+      }
+      msg += `------------------------------------\n_আরোগ্য কামনা করছি।_`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function openRxModal() {
+      const name = document.getElementById('f_name').value;
+      if (!name) { alert("আগে রোগীর নাম লিখুন!"); return; }
+
+      const visitBoxes = document.querySelectorAll('#rxVisitContainer > .rx-visit-box');
+      const lastVisit = visitBoxes.length > 0 ? visitBoxes[visitBoxes.length - 1] : null;
+
+      document.getElementById('pr_clinic').innerText = document.getElementById('disp_clinic_name').innerText;
+      document.getElementById('pr_doc').innerText = localStorage.getItem('doctor_name') || '';
+      document.getElementById('pr_contact').innerText = document.getElementById('active_chamber_address').innerText;
+      document.getElementById('pr_name').innerText = name;
+      document.getElementById('pr_age').innerText = `${document.getElementById('f_age').value || 'N/A'} / ${document.getElementById('f_gender').value || ''}`;
+      document.getElementById('pr_id').innerText = document.getElementById('f_case_no').value;
+      document.getElementById('pr_date').innerText = lastVisit ? lastVisit.querySelector('.visit-date').value : document.getElementById('f_date').value;
+      document.getElementById('pr_disease').innerText = document.getElementById('f_disease').value || 'জেনারেল কেস';
+
+      let medsHtml = '';
+      if (lastVisit) {
+        lastVisit.querySelectorAll('.med-row').forEach((mr, i) => {
+          const m = mr.querySelector('.med-name').value;
+          const s = mr.querySelector('.med-scale').value;
+          const d = mr.querySelector('.med-dose').value;
+          if (m) medsHtml += `<div class="mb-1"><strong>${i+1}. ${esc(m)} [${esc(s)}]</strong> — <span>${esc(d)}</span></div>`;
+        });
+      }
+      document.getElementById('pr_meds_list').innerHTML = medsHtml || 'কোনো ঔষধ দেওয়া হয়নি';
+      document.getElementById('pr_comments').innerText = document.getElementById('f_comments').value || 'নিয়ম মেনে ঔষধ সেবন করুন।';
+      document.getElementById('pr_next').innerText = (lastVisit && lastVisit.querySelector('.visit-next').value) || '';
+
+      new bootstrap.Modal(document.getElementById('rxModal')).show();
+    }
+
+    function printRxDirectly() {
+      triggerDirectPrint({
+        clinic: document.getElementById('pr_clinic').innerText,
+        doc: document.getElementById('pr_doc').innerText,
+        contact: document.getElementById('pr_contact').innerText,
+        name: document.getElementById('pr_name').innerText,
+        age: document.getElementById('pr_age').innerText,
+        id: document.getElementById('pr_id').innerText,
+        date: document.getElementById('pr_date').innerText,
+        disease: document.getElementById('pr_disease').innerText,
+        meds: document.getElementById('pr_meds_list').innerHTML,
+        comments: document.getElementById('pr_comments').innerText,
+        next: document.getElementById('pr_next').innerText
+      });
+    }
+
+    function triggerDirectPrint(data) {
+      data = Object.fromEntries(Object.entries(data).map(([k, v]) => [k, k === 'meds' ? v : esc(v)]));
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'absolute';
+      iframe.style.width = '0px';
+      iframe.style.height = '0px';
+      iframe.style.border = 'none';
+      document.body.appendChild(iframe);
+
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <html>
+          <head>
+            <title>Prescription Pad</title>
+            <style>
+              body { font-family: system-ui, sans-serif; padding: 20px; color: #111; font-size: 13.5px; }
+              .header { text-align: center; border-bottom: 2px solid #0f766e; padding-bottom: 8px; margin-bottom: 12px; }
+              .clinic { font-size: 18px; font-weight: bold; color: #0f766e; margin: 0; }
+              .doc { font-weight: 600; font-size: 13px; margin: 2px 0; }
+              .contact { font-size: 11px; color: #555; }
+              .row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+              .rx-box { border: 1px solid #999; border-radius: 6px; padding: 12px; background: #fafafa; margin: 15px 0; }
+              .footer { text-align: center; font-size: 10px; color: #777; border-top: 1px solid #ccc; padding-top: 8px; margin-top: 25px; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="clinic">${data.clinic}</div>
+              <div class="doc">${data.doc}</div>
+              <div class="contact">${data.contact}</div>
+            </div>
+            <div class="row">
+              <span><strong>রোগী:</strong> ${data.name}</span>
+              <span><strong>বয়স/লিঙ্গ:</strong> ${data.age}</span>
+            </div>
+            <div class="row" style="border-bottom: 1px solid #ddd; padding-bottom: 4px;">
+              <span><strong>তারিখ:</strong> ${data.date}</span>
+              <span><strong>আইডি:</strong> ${data.id}</span>
+            </div>
+            <div style="margin: 8px 0;"><strong>সমস্যা/রোগ:</strong> ${data.disease}</div>
+            <div class="rx-box">
+              <strong style="color: #0f766e; font-size: 15px;">Rx (ঔষধ ও মাত্রা):</strong>
+              <div style="margin-top: 8px;">${data.meds}</div>
+            </div>
+            <div><strong>পরামর্শ:</strong> ${data.comments}</div>${data.next ? `<div style="margin-top:6px"><strong>পরবর্তী ভিজিট:</strong> ${data.next}</div>` : ''}
+            <div style="margin-top:40px;text-align:right;font-size:12px">স্বাক্ষর: ____________</div>
+            <div class="footer">আরোগ্য আপনার চিরসঙ্গী হোক। চিকিৎসকের পরামর্শ অনুযায়ী সেব্য।</div>
+          </body>
+        </html>
+      `);
+      doc.close();
+
+      setTimeout(() => {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        setTimeout(() => document.body.removeChild(iframe), 1000);
+      }, 300);
+    }
+
+    function sendWhatsAppPrescription() {
+      const name = document.getElementById('f_name').value;
+      const phone = document.getElementById('f_phone').value;
+      if (!name) { alert("রোগীর নাম লিখুন!"); return; }
+
+      let msg = `*${document.getElementById('disp_clinic_name').innerText}*\n`;
+      msg += `${localStorage.getItem('doctor_name') || ''}\n\n`;
+      msg += `*রোগী:* ${name} (আইডি: ${document.getElementById('f_case_no').value})\n`;
+      msg += `*রোগ নির্ণয়:* ${document.getElementById('f_disease').value || 'হোমিওপ্যাথিক কেস'}\n`;
+      msg += `------------------------------------\n*Rx (ঔষধসমূহ):*\n`;
+
+      const visitBoxes = document.querySelectorAll('#rxVisitContainer > .rx-visit-box');
+      if (visitBoxes.length > 0) {
+        const lastV = visitBoxes[visitBoxes.length - 1];
+        lastV.querySelectorAll('.med-row').forEach((mr, i) => {
+          const m = mr.querySelector('.med-name').value;
+          const s = mr.querySelector('.med-scale').value;
+          const d = mr.querySelector('.med-dose').value;
+          if (m) msg += `${i+1}. *${m} [${s}]* — ${d}\n`;
+        });
+      }
+
+      if (document.getElementById('f_comments').value) {
+        msg += `\n*পরামর্শ:* ${document.getElementById('f_comments').value}\n`;
+      }
+      const lv0 = [...document.querySelectorAll('#rxVisitContainer > .rx-visit-box')].pop();
+      const nx = lv0 && lv0.querySelector('.visit-next').value;
+      if (nx) msg += `\n*পরবর্তী ভিজিট:* ${nx}\n`;
+      msg += `------------------------------------\n_দ্রুত আরোগ্য কামনায়।_`;
+
+      let cleanPhone = waNum(phone);
+      if (cleanPhone.startsWith('01')) cleanPhone = '88' + cleanPhone;
+
+      const waUrl = cleanPhone 
+        ? `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`
+        : `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+    }
+
+    function searchAI(platform) {
+      let lsmcTxt = '';
+      document.querySelectorAll('.lsmc-row').forEach((r, i) => {
+        const loc = r.querySelector('.lsmc-loc').value;
+        const sens = r.querySelector('.lsmc-sens').value;
+        const agg = r.querySelector('.lsmc-agg').value;
+        const amel = r.querySelector('.lsmc-amel').value;
+        if (loc || sens) lsmcTxt += `\n- লক্ষণ ${i+1}: স্থান: [${loc}], অনুভূতি: [${sens}], বৃদ্ধি (<): [${agg}], উপশম (>): [${amel}], আনুষঙ্গিক: [${r.querySelector('.lsmc-conc').value}]`;
+      });
+
+      const prompt = `[ROLE: Expert Classical Homoeopathic Master Prescriber]
+অনুগ্রহ করে নিচের হোমিওপ্যাথিক কেসটি বিশ্লেষণ করে কেন্টীয় স্তরক্রম ও বোনিংহাউসেন রীতি মেনে সবচেয়ে উপযুক্ত একক ঔষধ (Similimum) নির্বাচন করুন:
+
+--- রোগীর সারসংক্ষেপ ---
+- রোগ/উপসর্গ: ${document.getElementById('f_disease').value || 'নির্দিষ্ট নয়'}
+- বয়স ও লিঙ্গ: ${document.getElementById('f_age').value || 'অনির্দিষ্ট'}, ${document.getElementById('f_gender').value || 'অনির্দিষ্ট'}
+- কারণ (Ailments from): ${document.getElementById('f_causation').value || 'নেই'}
+- অদ্ভুত লক্ষণ (§153 P.Q.R.S): ${document.getElementById('f_pqrs').value || 'নেই'}
+- আরোগ্যের বাধা (§260): ${document.getElementById('f_obstacles').value || 'নেই'}
+- ডায়াথিসিস ও মায়াজম: [${document.getElementById('f_diathesis').value || 'অনির্দিষ্ট'}], [${document.getElementById('f_miasm').value || 'অনির্দিষ্ট'}]
+- তাপীয় অবস্থা: ${document.getElementById('f_thermal').value || 'অস্পষ্ট'}
+- স্বপ্ন ও সঙ্গপ্রীতি: [${document.getElementById('f_dreams').value || 'নেই'}], [${document.getElementById('f_company').value || 'অনির্দিষ্ট'}]
+- অতীত ইতিহাস: ${document.getElementById('f_past_history').value || 'নেই'}; পারিবারিক: ${document.getElementById('f_family_history').value || 'নেই'}
+
+--- অঙ্গভিত্তিক লক্ষণ (L-S-M-C) ---${lsmcTxt || '\n- কোনো বিশেষ বর্ণনা নেই'}
+
+--- ধাতুগত ও শারীরিক সাধারণ (Physical Generals) ---
+- ক্ষুধা ও তৃষ্ণা: ${document.getElementById('f_appetite').value || 'স্বাভাবিক'}, ${document.getElementById('f_thirst').value || 'স্বাভাবিক'}
+- পছন্দ/অপছন্দ: ইচ্ছা: [${document.getElementById('f_desires').value || 'নেই'}], অনিচ্ছা: [${document.getElementById('f_aversions').value || 'নেই'}]
+- জিহ্বা ও ঘাম: [${document.getElementById('f_tongue').value || 'স্বাভাবিক'}], [${document.getElementById('f_sweat').value || 'স্বাভাবিক'}]
+- মল ও নিদ্রা: [${document.getElementById('f_evacuation').value || 'স্বাভাবিক'}], [${document.getElementById('f_sleep').value || 'স্বাভাবিক'}]
+
+--- মানসিক স্বভাব (Mind Generals) ---
+- মেজাজ ও ক্রোধ: ${document.getElementById('f_mind').value || 'স্বাভাবিক'}
+- ভয় ও সান্ত্বনা: ভয়: [${document.getElementById('f_fears').value || 'নেই'}], সান্ত্বনায়: [${document.getElementById('f_consolation').value || 'নিরপেক্ষ'}]
+
+--- আপনার করণীয় ---
+১. কেন্টীয় বিশ্লেষণ অনুযায়ী শীর্ষ ৩টি সদৃশ ঔষধের তুলনামূলক বিচার।
+২. সর্বাধিক নির্দেশিত একক ঔষধ (Similimum), প্রস্তাবিত স্কেল (LM/Centisimal) ও সেবনমাত্রার নিয়ম উল্লেখ করুন।`;
+
+      copyText(prompt).then(() => {
+        alert("কেসের এআই প্রম্পট কপি হয়েছে! প্ল্যাটফর্ম খুললে শুধু পেস্ট (Ctrl+V) করুন।");
+        window.open(platform === 'chatgpt' ? 'https://chatgpt.com/' : 'https://gemini.google.com/', '_blank');
+      });
+    }
+
+    function exportDataBackup() {
+      db.transaction(["patients"], "readonly").objectStore("patients").getAll().onsuccess = e => {
+        const st = {};
+        ['doctor_name', 'clinic_chambers', 'custom_clinic_logo', 'custom_doc_photo'].forEach(k => { const v = localStorage.getItem(k); if (v != null) st[k] = v; });
+        dl(new Blob([JSON.stringify({ app: 'HomeoCarePro', v: 2, patients: e.target.result, settings: st })], { type: 'application/json' }), `HomeoCare_Backup_${todayStr()}.json`);
+        localStorage.setItem('last_backup', Date.now());
+        renderBackupBanner();
+      };
+    }
+    function exportCSV() {
+      db.transaction(["patients"], "readonly").objectStore("patients").getAll().onsuccess = e => {
+        const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+        const H = ['কেস আইডি', 'তারিখ', 'নাম', 'বয়স', 'লিঙ্গ', 'মোবাইল', 'ঠিকানা', 'রোগ', 'মায়াজম', 'ভিজিট', 'মোট ফি', 'মোট জমা'];
+        const rows = e.target.result.map(p => { const V = p.visits || [];
+          return [p.case_no, p.entry_date, p.patient_name, p.age, p.gender, p.phone, p.address, p.disease_tag, p.miasm, V.length,
+            V.reduce((a, v) => a + vFee(v), 0), V.reduce((a, v) => a + vPaid(v), 0)].map(q).join(','); });
+        dl(new Blob(['\\ufeff' + H.map(q).join(',') + '\\n' + rows.join('\\n')], { type: 'text/csv;charset=utf-8' }), `HomeoCare_Patients_${todayStr()}.csv`);
+      };
+    }
+
+    function importDataBackup(event) {
+      const file = event.target.files[0]; if (!file) return;
+      const r = new FileReader();
+      r.onload = e => {
+        try {
+          const j = JSON.parse(e.target.result);
+          const list = Array.isArray(j) ? j : j.patients;
+          if (!Array.isArray(list)) throw 0;
+          if (j.settings) Object.entries(j.settings).forEach(([k, v]) => { try { localStorage.setItem(k, v); } catch {} });
+          const tx = db.transaction(["patients"], "readwrite"), st = tx.objectStore("patients");
+          st.getAll().onsuccess = ev => {
+            const key = p => [p.case_no, p.patient_name, p.entry_date].join('|');
+            const have = new Set(ev.target.result.map(key)); let n = 0;
+            list.forEach(p => { if (have.has(key(p))) return; delete p.id; st.add(p); n++; });
+            tx.oncomplete = () => { alert(toBn(n) + " জন রোগীর ডেটা রিস্টোর হয়েছে।"); loadDoctorProfile(); updateAnalytics(); showListView(); };
+          };
+        } catch { alert("ভুল ব্যাকআপ ফাইল!"); }
+      };
+      r.readAsText(file);
+      event.target.value = '';
+    }
+
+
+    // ===== নতুন ফিচার =====
+    document.getElementById('remedyList').innerHTML = 'Aconite,Antim crud,Apis mel,Argentum nit,Arnica,Arsenicum alb,Belladonna,Berberis vulg,Bryonia,Calcarea carb,Calcarea phos,Calcarea fluor,Calcarea sulph,Cantharis,Carbo veg,Carcinosin,Causticum,Chamomilla,Chelidonium,China,Cina,Cocculus,Colocynthis,Drosera,Dulcamara,Euphrasia,Ferrum phos,Gelsemium,Graphites,Hepar sulph,Hyoscyamus,Hypericum,Ignatia,Ipecac,Kali bich,Kali carb,Kali mur,Kali phos,Lachesis,Ledum,Lycopodium,Magnesia phos,Medorrhinum,Mercurius sol,Natrum mur,Natrum phos,Natrum sulph,Nitric acid,Nux vomica,Opium,Phosphorus,Phytolacca,Podophyllum,Psorinum,Pulsatilla,Rhus tox,Rumex,Ruta,Sepia,Silicea,Spongia,Staphysagria,Stramonium,Sulphur,Syphilinum,Thuja,Tuberculinum,Veratrum alb,Zincum met'.split(',').map(x => `<option value="${x}">`).join('');
+
+    document.getElementById('settingsModal').addEventListener('show.bs.modal', () => {
+      const c = document.getElementById('chamberConfigContainer'); c.innerHTML = '';
+      JSON.parse(localStorage.getItem('clinic_chambers') || '[]').forEach(x => addChamberConfigRow(x.name, x.address));
+      document.getElementById('cfg_pin').value = '';
+    });
+
+    function renderBackupBanner() {
+      const lb = +localStorage.getItem('last_backup') || 0;
+      document.getElementById('backupBanner').style.display = (allPatientsCache.length > 0 && Date.now() - lb > 7 * 864e5) ? '' : 'none';
+    }
+
+    function deletePatient() {
+      const id = +document.getElementById('patientId').value;
+      if (!id || !confirm('এই রোগীর সমস্ত রেকর্ড স্থায়ীভাবে মুছে যাবে। নিশ্চিত?')) return;
+      const tx = db.transaction(["patients"], "readwrite");
+      tx.objectStore("patients").delete(id);
+      tx.oncomplete = () => { updateAnalytics(); showListView(); };
+    }
+
+    function renderReport() {
+      db.transaction(["patients"], "readonly").objectStore("patients").getAll().onsuccess = e => {
+        const t = todayStr(), m = t.slice(0, 7), cut = todayStr(new Date(Date.now() - 30 * 864e5));
+        let inc = 0, minc = 0, due = 0; const fol = [], dues = [];
+        e.target.result.forEach(p => {
+          const V = p.visits || []; let pd = 0;
+          V.forEach(v => { const pa = vPaid(v); if (v.date === t) inc += pa; if ((v.date || '').slice(0, 7) === m) minc += pa; pd += Math.max(0, vFee(v) - pa); });
+          if (pd > 0) { due += pd; dues.push([p, pd]); }
+          const lv = V.reduce((a, v) => !a || v.date >= a.date ? v : a, null);
+          if (lv && lv.next && lv.next <= t && lv.next >= cut) fol.push([p, lv.next]);
+        });
+        const set = (id, v) => document.getElementById(id).innerText = toBn(v);
+        set('rp_today', inc); set('rp_month', minc); set('rp_due', due);
+        const clinic = document.getElementById('disp_clinic_name').innerText;
+        const row = (p, info, extra) => `<div class="d-flex justify-content-between align-items-center border-bottom py-1"><div onclick="loadPatientForEdit(${p.id})" style="cursor:pointer"><strong>${esc(p.patient_name)}</strong> <small class="text-muted">${esc(p.case_no)}</small><br><small>${info}</small></div>${extra}</div>`;
+        const wa = (p, n) => `<a class="btn btn-sm btn-outline-success py-0" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?phone=${waNum(p.phone)}&amp;text=${encodeURIComponent('প্রিয় ' + p.patient_name + ', আপনার পরবর্তী ভিজিটের তারিখ ' + n + '। - ' + clinic)}"><i class="fa-brands fa-whatsapp"></i> রিমাইন্ডার</a>`;
+        document.getElementById('rp_follow').innerHTML = fol.sort((a, b) => a[1] < b[1] ? -1 : 1).map(([p, n]) => row(p, n === t ? 'আজ' : 'মিস: ' + esc(n), wa(p, n))).join('') || '<div class="text-muted small">কেউ নেই।</div>';
+        document.getElementById('rp_dues').innerHTML = dues.map(([p, d]) => row(p, 'বাকি ৳' + toBn(d), '')).join('') || '<div class="text-muted small">কোনো বাকি নেই।</div>';
+      };
+    }
+
+    // পিন লক (শুধু স্ক্রিন লক; ডেটা এনক্রিপ্ট নয়)
+    async function hashPin(p) {
+      if (window.crypto && crypto.subtle) {
+        const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('hc|' + p));
+        return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join('');
+      }
+      return 'p' + btoa(p);
+    }
+    async function savePin() {
+      const v = bnToEn(document.getElementById('cfg_pin').value.trim());
+      if (v.length >= 4) localStorage.setItem('app_pin', await hashPin(v));
+    }
+    function clearPin() { localStorage.removeItem('app_pin'); alert('অ্যাপ লক বন্ধ হয়েছে।'); }
+    function lockApp() {
+      if (!localStorage.getItem('app_pin')) return;
+      document.getElementById('lockScreen').style.display = 'flex';
+      document.getElementById('lockPin').value = '';
+    }
+    async function unlockApp() {
+      if (await hashPin(bnToEn(document.getElementById('lockPin').value.trim())) === localStorage.getItem('app_pin'))
+        document.getElementById('lockScreen').style.display = 'none';
+      else alert('ভুল পিন!');
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) window._hid = Date.now();
+      else if (window._hid && Date.now() - window._hid > 120000) lockApp();
+    });
+    lockApp();
+
+    // ইনস্টল, অফলাইন স্ট্যাটাস, সার্ভিস ওয়ার্কার
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; });
+    function installApp() {
+      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
+      else alert('ব্রাউজার মেনু (⋮) থেকে "Install app / Add to Home screen" চাপুন। (HTTPS হোস্টিং প্রয়োজন)');
+    }
+    const netUI = () => document.getElementById('netBadge').style.display = navigator.onLine ? 'none' : '';
+    addEventListener('online', netUI); addEventListener('offline', netUI); netUI();
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
+  </script>
+</body>
+</html>
